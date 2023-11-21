@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Flight Booking Web App</title>
+    <link href="styles.css" rel="stylesheet" />
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table td {
+            border: 1px solid #000;
+            width: 10px;
+            height: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        table td.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Flight ####</h1>
+        <button onclick="location.href='index.html'" class="btn">Home</button>
+    </div>
+
+    <div class="card">
+        <h2>Select Seats</h2>
+        <div class="flex-container">
+            <div class="seat-map">
+                <table id="seatTable">
+                    <tbody id="seatTableBody"></tbody>
+                </table>
+            </div>
+            <div class="selected-seats">
+                <h3>Selected Seats</h3>
+                <ul id="selectedSeatsList"></ul>
+                <div class="cancellation-insurance">
+                    <input type="checkbox" id="cancellationInsurance">
+                    <label for="cancellationInsurance">Cancellation Insurance (+$50)</label>
+                </div>
+                <div class="total-price">Total Price: $<span id="totalPrice">0</span></div>
+                <button class="btn">Confirm and Pay</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function toggleSeat(cell) {
+            if (!cell.classList.contains('aisle')) {
+                cell.classList.toggle('selected');
+                updateSelectedSeatsList();
+                calculateTotalPrice();
+            }
+        }
+
+        function updateSelectedSeatsList() {
+            const selectedSeatsList = document.getElementById('selectedSeatsList');
+            selectedSeatsList.innerHTML = ''; // Clear the list
+
+            const selectedSeats = document.querySelectorAll('.selected');
+            selectedSeats.forEach(seat => {
+                const listItem = document.createElement('li');
+                listItem.textContent = seat.textContent;
+                selectedSeatsList.appendChild(listItem);
+            });
+        }
+
+        function calculateTotalPrice() {
+            const selectedSeats = document.querySelectorAll('.selected');
+            const totalPriceElement = document.getElementById('totalPrice');
+            let totalPrice = selectedSeats.length * 250; // Assuming $250 per seat
+            
+            const cancellationInsurance = document.getElementById('cancellationInsurance');
+            if (cancellationInsurance.checked) {
+                totalPrice += 50; // Add $50 for cancellation insurance
+            }
+            
+            totalPriceElement.textContent = totalPrice;
+        }
+
+        const cancellationInsurance = document.getElementById('cancellationInsurance');
+
+        // Event listener for the cancellation insurance checkbox
+        cancellationInsurance.addEventListener('change', function() {
+            calculateTotalPrice();
+        });
+
+        // Generating seat table dynamically using JavaScript
+        const seatTableBody = document.getElementById('seatTableBody');
+
+        // Generate 30 rows
+        for (let i = 1; i <= 20; i++) {
+            const row = document.createElement('tr');
+
+            // Generate columns for each row (A-F)
+            for (let j = 1; j <= 7; j++) {
+                const cell = document.createElement('td');
+                if (j === 4) { // Insert dummy cells for aisles
+                    cell.classList.add('aisle');
+                } else {
+                    cell.textContent = i + String.fromCharCode(64 + j - (j > 4 ? 2 : 0));
+                    cell.onclick = function() {
+                        toggleSeat(this);
+                    };
+                }
+                row.appendChild(cell);
+            }
+
+            seatTableBody.appendChild(row);
+        }
+    </script>
+</body>
+</html>

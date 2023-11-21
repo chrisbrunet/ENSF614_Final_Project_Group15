@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Flight Booking Web App</title>
+        <link href="styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="navbar">
+            <h1>Flight Reservation Web Application</h1>
+            <button onclick="location.href='user_login_register.html'" class="btn">Member Login/Register</button>
+            <button onclick="location.href='admin_login_register.html'" class="btn">Admin Login</button>
+            <button onclick="location.href='manage_booking.html'" class="btn">Manage Existing Booking</button>
+        </div>
+    
+        <div class="card">
+            <h2>Search Flights</h2>
+            <form>
+                <div class="input-group">
+                    <label for="departureAirport">Departure Airport:</label>
+                    <input type="text" id="departureAirport" name="departureAirport" required>
+                </div>
+                <div class="input-group">
+                    <label for="arrivalAirport">Arrival Airport:</label>
+                    <input type="text" id="arrivalAirport" name="arrivalAirport" required>
+                </div>
+                <div class="input-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <button type="submit" class="btn">Search Flights</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Available Flights</h2>
+            <table class="flight-table">
+                <thead>
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure City</th>
+                        <th>Arrival City</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Example</td>
+                        <td>New York</td>
+                        <td>Los Angeles</td>
+                        <td>2023-11-25</td>
+                        <td><button onclick="location.href='selected_flight.html'" class="btn">Select Flight</button></td>
+                    </tr>
+                    <tr>
+                        <td>FL123</td>
+                        <td>Calgary</td>
+                        <td>Toronto</td>
+                        <td>2023-12-01</td>
+                        <td><button class="btn">Select Flight</button></td>
+                    </tr>
+                    <tr>
+                        <td>FL124</td>
+                        <td>Vancouver</td>
+                        <td>Tokyo</td>
+                        <td>2023-12-05</td>
+                        <td><button class="btn">Select Flight</button></td>
+                    </tr>
+                    <tr>
+                        <td>FL125</td>
+                        <td>Los Angeles</td>
+                        <td>Space</td>
+                        <td>2023-12-05</td>
+                        <td><button class="btn">Select Flight</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

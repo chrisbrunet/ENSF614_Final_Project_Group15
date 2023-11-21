@@ -1,0 +1,117 @@
+body {
+    background-image: url('background.jpg'); 
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+}
+
+.navbar h1 {
+    margin-right: 10px;
+    display: inline;
+}
+
+.navbar .btn {
+    margin-left: 10px;
+    display: inline;
+}
+
+.card {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 10px;
+    margin-right: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+.seat-map {
+    flex: 1;
+    margin-right: 20px;
+}
+.selected-seats {
+    flex: 1;
+}
+.total-price {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.flight-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.flight-table th,
+        .flight-table td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .flight-table th:nth-child(5),
+        .flight-table td:nth-child(5) {
+            width: 25%;
+        }
+
+        .flight-table th,
+        .flight-table td {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .flight-table th:last-child,
+        .flight-table td:last-child {
+            border-right: none;
+        }
+
+        .flight-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        
