@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Flight Booking Web App</title>
+    <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="navbar">
+        <h1>Manage Booking</h1>
+        <button onclick="location.href='index.html'" class="btn">Home</button>
+    </div>
+    <div class="card">
+        <form>
+            <h2>Booking ID</h2>
+            <div class="input-group">
+                <input type="text" id="bookingID" name="bookingID" required>
+            </div>
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
+
+    <div class="card" id="loginForm">
+        <h2>Search Results</h2>
+        <table class="flight-table">
+            <thead>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Departure City</th>
+                    <th>Arrival City</th>
+                    <th>Date</th>
+                    <th>Tickets</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Example</td>
+                    <td>New York</td>
+                    <td>Los Angeles</td>
+                    <td>2023-11-25</td>
+                    <td>3</td>
+                    <td><button class="btn">Cancel Booking</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
