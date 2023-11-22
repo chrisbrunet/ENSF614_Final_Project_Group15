@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Flight Booking Web App</title>
+        <link href="styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="navbar">
+            <h1>Admin Portal</h1>
+            <button onclick="location.href='index.html'" class="btn">Home</button>
+        </div>
+        
+        <div class="card">
+            <form>
+                <h2>Search Flights</h2>
+                <div class="input-group">
+                    <input type="text" id="bookingID" name="bookingID" required>
+                </div>
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>All Flights</h2>
+            <table class="flight-table">
+                <thead>
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure City</th>
+                        <th>Arrival City</th>
+                        <th>Date</th>
+                        <th>Crew</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Example </td>
+                        <td>New York <button class="btn">Change</button></td>
+                        <td>Los Angeles <button class="btn">Change</button></td>
+                        <td>2023-11-25 <button class="btn">Change</button></td>
+                        <td>A <button class="btn">Change</button></td>
+                    </tr>
+                    <tr>
+                        <td>FL123</td>
+                        <td>Calgary <button class="btn">Change</button></td>
+                        <td>Toronto <button class="btn">Change</button></td>
+                        <td>2023-12-01 <button class="btn">Change</button></td>
+                        <td>B <button class="btn">Change</button></td>
+                    </tr>
+                    <tr>
+                        <td>FL124</td>
+                        <td>Vancouver <button class="btn">Change</button></td>
+                        <td>Tokyo <button class="btn">Change</button></td>
+                        <td>2023-12-05 <button class="btn">Change</button></td>
+                        <td>C <button class="btn">Change</button></td>
+                    </tr>
+                    <tr>
+                        <td>FL125</td>
+                        <td>Los Angeles <button class="btn">Change</button></td>
+                        <td>Space <button class="btn">Change</button></td>
+                        <td>2023-12-05 <button class="btn">Change</button></td>
+                        <td>A <button class="btn">Change</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>All Aircraft</h2>
+            <table class="flight-table">
+                <thead>
+                    <tr>
+                        <th>Aircraft ID</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 </td>
+                        <td>AC-130 </td>
+                    </tr>
+                    <tr>
+                        <td>2 </td>
+                        <td>F22 </td>
+                    </tr>
+                    <tr>
+                        <td>3 </td>
+                        <td>F14 </td>
+                    </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Options</h2>
+            <button onclick="toggleForm('addPlane')" class="btn">Add Plane</button>
+            <button onclick="toggleForm('removePlane')" class="btn">Remove Plane</button>
+            <button onclick="toggleForm('addCrew')" class="btn">Add Crew</button>
+            <button onclick="toggleForm('removeCrew')" class="btn">Remove Crew</button>
+            <button onclick="toggleForm('addDest')" class="btn">Add Destination</button>
+            <button onclick="toggleForm('removeDest')" class="btn">Remove Destination</button>
+            <button onclick=registerdUsersAlert() class="btn">Print Registered User List</button>
+
+        </div>
+
+        <div class="card" id="addPlaneCard" style="display: none;">
+            <h2>Add Plane</h2>
+            <form>
+                <div class="input-group">
+                    <label for="aircraftID">ID:</label>
+                    <input type="text" id="aircraftID" name="aircraftID" required>
+                </div>
+                <div class="input-group">
+                    <label for="type">Type:</label>
+                    <input type="text" id="type" name="type" required>
+                </div>
+                <button onclick=changeAlert() class="btn">Add</button>
+            </form>
+        </div>
+
+        <div class="card" id="removePlaneCard" style="display: none;">
+            <h2>Remove Plane</h2>
+            <form>
+                <div class="input-group">
+                    <label for="aircraftID">ID:</label>
+                    <input type="text" id="aircraftID" name="aircraftID" required>
+                </div>
+                <button onclick=changeAlert() class="btn">Remove</button>
+            </form>
+        </div>
+
+        <div class="card" id="addCrewCard" style="display: none;">
+            <h2>Add Crew</h2>
+            <form>
+                <div class="input-group">
+                    <label for="crewID">ID:</label>
+                    <input type="text" id="crewID" name="crewID" required>
+                </div>
+                <div class="input-group">
+                    <label for="crewSize">Size:</label>
+                    <input type="text" id="crewSize" name="crewSize" required>
+                </div>
+                <button onclick=changeAlert() class="btn">Add</button>
+            </form>
+        </div>
+
+        <div class="card" id="removeCrewCard" style="display: none;">
+            <h2>Remove Crew</h2>
+            <form>
+                <div class="input-group">
+                    <label for="crewID">ID:</label>
+                    <input type="text" id="crewID" name="crewID" required>
+                </div>
+                <button onclick=changeAlert() class="btn">Remove</button>
+            </form>
+        </div>
+
+        <div class="card" id="addDestCard" style="display: none;">
+            <h2>Add Destination</h2>
+            <form>
+                <div class="input-group">
+                    <label for="dest">New Destination:</label>
+                    <input type="text" id="dest" name="dest" required>
+                </div>
+                <button onclick=changeAlert() class="btn">Add</button>
+            </form>
+        </div>
+
+        <div class="card" id="removeDestCard" style="display: none;">
+            <h2>Remove Destination</h2>
+            <form>
+                <div class="input-group">
+                    <label for="dest">Destination:</label>
+                    <input type="text" id="dest" name="dest" required>
+                </div>
+                <button onclick=changeAlert() class="btn">Remove</button>
+            </form>
+        </div>
+
+        <script>
+           function toggleForm(formType) {
+                var addPlaneCard = document.getElementById("addPlaneCard");
+                var removePlaneCard = document.getElementById("removePlaneCard");
+                var addCrewCard = document.getElementById("addCrewCard");
+                var removeCrewCard = document.getElementById("removeCrewCard");
+                var addDestCard = document.getElementById("addDestCard");
+                var removeDestCard = document.getElementById("removeDestCard");
+
+                // Hide all cards initially
+                var allCards = [addPlaneCard, removePlaneCard, addCrewCard, removeCrewCard, addDestCard, removeDestCard];
+                allCards.forEach(function(card) {
+                    card.style.display = "none";
+                });
+
+                // Show the selected card
+                switch(formType) {
+                    case "addPlane":
+                        addPlaneCard.style.display = "block";
+                        break;
+                    case "removePlane":
+                        removePlaneCard.style.display = "block";
+                        break;
+                    case "addCrew":
+                        addCrewCard.style.display = "block";
+                        break;
+                    case "removeCrew":
+                        removeCrewCard.style.display = "block";
+                        break;
+                    case "addDest":
+                        addDestCard.style.display = "block";
+                        break;
+                    case "removeDest":
+                        removeDestCard.style.display = "block";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            function changeAlert(){
+                alert("The update has been confirmed.")
+            }
+
+            function registerdUsersAlert(){
+                alert("Printing List of Registered Users...")
+            }
+            
+        </script>
+    </body>
+</html>
