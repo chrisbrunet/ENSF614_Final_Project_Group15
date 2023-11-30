@@ -102,14 +102,14 @@ VALUES
 DROP TABLE IF EXISTS REGISTERED_USER;
 CREATE TABLE REGISTERED_USER (
 	userID int not null auto_increment,
-    email varchar(20) not null,
+    email varchar(50) not null,
     firstName varchar(20) not null,
     lastName varchar(20) not null,
     address varchar(20) not null,
     birthdate date not null,
     password varchar(20) not null,
-    primary key (userID),
-    foreign key (email) references USER(email)
+    primary key (userID)
+    #foreign key (email) references USER(email)
 );
 
 INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password)
@@ -202,14 +202,11 @@ VALUES
 (1, '2B', 1),
 (1, '3C', 1);
 
-## HOME PAGE
-## Search Flights Button: replace Calgary and Toronto and 2023-12-05 with value from form
-select * from Flight
-where departCity = 'Calgary' and arriveCity = 'Toronto' and flightDate = '2023-12-05';
+SELECT seatNo, f.flightID, availability, seatType, basePrice*priceMultiplier AS seatPrice
+FROM FLIGHT AS f
+JOIN SEATS AS s
+ON f.flightID = s.flightID
+JOIN SEAT_TYPE_PRICES AS p
+ON s.seatType = p.seatType
+WHERE f.flightID = 1 AND seatNo = '1A'
 
-## User Login/Register
-## Login Button:
-select * from Registered_User
-where email = 'johndoe@gmail.com' and password = 'pword123';
-
-## Register Button: 
