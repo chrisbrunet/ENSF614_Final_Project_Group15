@@ -2,7 +2,6 @@ DROP DATABASE IF EXISTS AIRLINE;
 CREATE DATABASE AIRLINE; 
 USE AIRLINE;
 
-
 DROP TABLE IF EXISTS CREW;
 CREATE TABLE CREW (
 	crewID	varchar(1) not null,
@@ -203,5 +202,14 @@ VALUES
 (1, '2B', 1),
 (1, '3C', 1);
 
+## HOME PAGE
+## Search Flights Button: replace Calgary and Toronto and 2023-12-05 with value from form
+select * from Flight
+where departCity = 'Calgary' and arriveCity = 'Toronto' and flightDate = '2023-12-05';
 
+## User Login/Register
+## Login Button:
+select * from Registered_User
+where email = 'johndoe@gmail.com' and password = 'pword123';
 
+## Register Button: 
