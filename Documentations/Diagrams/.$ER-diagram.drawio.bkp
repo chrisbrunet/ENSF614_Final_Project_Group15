@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-11-30T18:15:00.373Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="eo7I4zkxI6yTLJQg-iMD" version="22.1.2" type="device">
+<mxfile host="Electron" modified="2023-11-30T18:14:50.200Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="XsS1jrrfqImG5AnNyE_g" version="22.1.2" type="device">
   <diagram name="Page-1" id="eg3Y5GQemXASEwG46M90">
     <mxGraphModel dx="1804" dy="1709" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -780,7 +780,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="GFC2JxYRik2CeJahCHrR-26" value="priceMultiplier" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="GFC2JxYRik2CeJahCHrR-24" vertex="1">
+        <mxCell id="GFC2JxYRik2CeJahCHrR-26" value="price" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="GFC2JxYRik2CeJahCHrR-24" vertex="1">
           <mxGeometry x="30" width="150" height="30" as="geometry">
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>

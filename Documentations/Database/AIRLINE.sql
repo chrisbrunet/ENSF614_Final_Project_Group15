@@ -18,19 +18,21 @@ CREATE TABLE AIRCRAFT (
 	aircraftID int not null auto_increment,
     crewID varchar(1) not null,
     aircraftType varchar(10) not null,
-    numRows int not null,
+    numBusinessRows int not null,
+	numComfortRows int not null,
+    numEconomyRows int not null,
 	primary key (aircraftID), 
     foreign key (crewID) references CREW(crewID)
 );
 
-INSERT INTO AIRCRAFT (crewID, aircraftType, numRows)
+INSERT INTO AIRCRAFT (crewID, aircraftType, numBusinessRows, numComfortRows, numEconomyRows)
 VALUES
-('A', '737', 20), 
-('B', '737', 20), 
-('C', '787', 20), 
-('D', '787', 20), 
-('E', '747', 20), 
-('F', 'F-16', 20);
+('A', '737', 6, 10, 20), 
+('B', '737', 6, 10, 20), 
+('C', '787', 10, 10, 20), 
+('D', '787', 10, 10, 20), 
+('E', '747', 20, 20, 40), 
+('F', '747', 20, 20, 40);
 
 DROP TABLE IF EXISTS FLIGHT;
 CREATE TABLE FLIGHT (
@@ -39,31 +41,32 @@ CREATE TABLE FLIGHT (
     departCity varchar(20) not null,
 	arriveCity varchar(20) not null,
     flightDate date not null,
+    basePrice decimal(10,2) not null,
 	primary key (flightID), 
     foreign key (aircraftID) references AIRCRAFT(aircraftID)
 );
 
-INSERT INTO FLIGHT (aircraftID, departCity, arriveCity, flightDate)
+INSERT INTO FLIGHT (aircraftID, departCity, arriveCity, flightDate, basePrice)
 VALUES
-(1, 'Calgary', 'Toronto', '2023-12-05'), 
-(2, 'Toronto', 'Calgary', '2023-12-05'), 
-(3, 'Calgary', 'Vancouver', '2023-12-05'), 
-(4, 'Vancouver', 'Calgary', '2023-12-05'), 
-(5, 'Vancouver', 'Toronto', '2023-12-05'), 
-(6, 'Toronto', 'Vancouver', '2023-12-05');
+(1, 'Calgary', 'Toronto', '2023-12-05', 100.00), 
+(2, 'Toronto', 'Calgary', '2023-12-05', 100.00), 
+(3, 'Calgary', 'Vancouver', '2023-12-05', 80.00), 
+(4, 'Vancouver', 'Calgary', '2023-12-05', 80.00), 
+(5, 'Vancouver', 'Toronto', '2023-12-05', 200.00), 
+(6, 'Toronto', 'Vancouver', '2023-12-05', 200.00);
 
 DROP TABLE IF EXISTS SEAT_TYPE_PRICES;
 CREATE TABLE SEAT_TYPE_PRICES (
     seatType varchar(20) not null,
-    price decimal(10, 2) not null,
+    priceMultiplier float not null,
     primary key (seatType)
 );
 
-INSERT INTO SEAT_TYPE_PRICES (seatType, price)
+INSERT INTO SEAT_TYPE_PRICES (seatType, priceMultiplier)
 VALUES
-('Ordinary', 50.00),
-('Comfort', 80.00),
-('Business', 120.00);
+('Ordinary', 1),
+('Comfort', 1.5),
+('Business', 2);
 
 DROP TABLE IF EXISTS SEATS;
 CREATE TABLE SEATS (
@@ -200,25 +203,5 @@ VALUES
 (1, '2B', 1),
 (1, '3C', 1);
 
-Select b1.bookingID, b1.userEmail, b1.flightID, f.departCity, f.arriveCity, f.flightDate, b2.seatNo, p.seatType, p.price
-from BOOKING as b1
-left join FLIGHT as f
-on b1.flightID = f.flightID
-left join BOOKED_SEATS as b2
-on b1.bookingID = b2.bookingID
-left join SEATS as s
-on s.seatNo = b2.seatNo
-left join SEAT_TYPE_PRICES as p
-on s.seatType = p.seatType;
 
-Select b1.bookingID, b1.userEmail, b1.flightID, f.departCity, f.arriveCity, f.flightDate, COUNT(b2.seatNo) as numSeats, SUM(p.price) as totPrice
-from BOOKING as b1
-left join FLIGHT as f
-on b1.flightID = f.flightID
-left join BOOKED_SEATS as b2
-on b1.bookingID = b2.bookingID
-left join SEATS as s
-on s.seatNo = b2.seatNo
-left join SEAT_TYPE_PRICES as p
-on s.seatType = p.seatType
-group by b1.bookingID;
+
