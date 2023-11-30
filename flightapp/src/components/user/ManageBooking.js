@@ -33,6 +33,10 @@ const ManageBooking = () => {
                     <div className="input-group">
                         <input type="text" id="bookingID" name="bookingID" required />
                     </div>
+                    <h2>Email on Booking</h2>
+                    <div class="input-group">
+                        <input type="text" id="email" name="email" required />
+                    </div>
                     <button type="submit" className="btn">
                         Search
                     </button>
