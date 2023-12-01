@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect   } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -21,24 +21,20 @@ const LoginRegisterPage = () => {
         setShowRegisterForm(formType === 'register');
     };
 
-    const [userDetails, setUserDetails] = useState({
-        firstName: '',
-        lastName: '',
-        address: '',
-        dob: '',
-        email: '',
-        regPassword: ''
-    });
+    const [password, setPassword] = useState("");
+
+    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [address, setAddress] = useState("");
+    const [birthdate, setBirthdate] = useState("");
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
     const [loginDetails, setLoginDetails] = useState({
         email: "",
         password: ""
     });
 
-    const handleRegister = (e) => {
-        e.preventDefault();
-        alert('You Have Successfully Registered as a Member!');
-    };
 
     const login = () => {
         axios.get("http://localhost:3001/api/registered_user/get_user", {
@@ -56,6 +52,34 @@ const LoginRegisterPage = () => {
             console.error("Error fetching flights:", error);
         });
     };
+
+    const handleRegister  = (e) => {
+        e.preventDefault()
+        axios.post('http://localhost:3001/api/registered_user/new_user', {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            address: address,
+            birthdate: birthdate,
+            password: password
+        }).then((response) => {
+            console.log(response);
+            if (response.data.success) {
+                setRegistrationSuccess(true);
+            } else {
+                alert(response.data);
+            }
+        })
+            .catch((error) => {
+                console.error("Error during registration:", error);
+                alert("Registration failed. See console for details.");
+            });
+    };
+    useEffect(() => {
+        if (registrationSuccess) {
+            navigate('/UserProfile');
+        }
+    }, [registrationSuccess, navigate]);
 
     return (
         <div>
@@ -102,17 +126,17 @@ const LoginRegisterPage = () => {
                 </form>
             </div>
 
-            <div className="card" style={{ display: showRegisterForm  ? 'block' : 'none' }}>
+            <div className="card" style={{ display: showRegisterForm ? 'block' : 'none' }}>
                 <h2>Register</h2>
-                <form onSubmit={handleRegister}>
+                <form >
                     <div className="input-group">
                         <label htmlFor="firstName">First Name:</label>
                         <input
                             type="text"
                             id="firstName"
                             name="firstName"
-                            value={userDetails.firstName}
-                            onChange={(e) => setUserDetails({ ...userDetails, firstName: e.target.value })}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                             required
                         />
                     </div>
@@ -122,9 +146,8 @@ const LoginRegisterPage = () => {
                             type="text"
                             id="lastName"
                             name="lastName"
-                            value={userDetails.lastName}
-                            onChange={(e) => setUserDetails({ ...userDetails, lastName: e.target.value })}
-
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                             required
                         />
                     </div>
@@ -134,9 +157,8 @@ const LoginRegisterPage = () => {
                             type="text"
                             id="address"
                             name="address"
-                            value={userDetails.address}
-                            onChange={(e) => setUserDetails({ ...userDetails, address: e.target.value })}
-
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
                             required
                         />
                     </div>
@@ -146,9 +168,8 @@ const LoginRegisterPage = () => {
                             type="date"
                             id="dob"
                             name="dob"
-                            value={userDetails.dob}
-                            onChange={(e) => setUserDetails({ ...userDetails, dob: e.target.value })}
-
+                            value={birthdate}
+                            onChange={(e) => setBirthdate(e.target.value)}
                             required
                         />
                     </div>
@@ -158,9 +179,8 @@ const LoginRegisterPage = () => {
                             type="email"
                             id="email"
                             name="email"
-                            value={userDetails.email}
-                            onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
-
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
@@ -170,13 +190,12 @@ const LoginRegisterPage = () => {
                             type="password"
                             id="regPassword"
                             name="regPassword"
-                            value={userDetails.regPassword}
-                            onChange={(e) => setUserDetails({ ...userDetails, regPassword: e.target.value })}
-
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
-                    <button type="submit" className="btn">Register</button>
+                    <button type="button" className="btn" onClick={handleRegister}>Register</button>
                 </form>
             </div>
         </div>
