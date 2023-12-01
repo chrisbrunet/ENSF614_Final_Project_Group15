@@ -246,6 +246,10 @@ app.post("/api/flight/add_payment_to_booking", (req, res) => {
 // ----------------------- END: SELECTING FLIGHT AND BOOKING TICKETS ------------------------
 
 
+// ----------------------- START: SEARCH FOR AND CANCELLING BOOKING BY USER ------------------------
+
+
+
 
 // ----------------------- START: ADDING AND MANAGING REGISTERED USERS ------------------------
 // Add new registered user
@@ -290,10 +294,10 @@ app.get("/api/registered_user/get_user", (req, res) => {
     sql, 
     [
       // TEST PARAMS
-      'johndoe@gmail.com',
-      'pword123'
-      // params.email,
-      // params.password
+      // 'example@gmail.com',
+      // 'pword1234567'
+      params.email,
+      params.password
     ],
   (err, result) => {
     if (err) {
@@ -304,6 +308,28 @@ app.get("/api/registered_user/get_user", (req, res) => {
   });
 });
 
+// check if user is signed up for airline credit card
+app.get("/api/registered_user/check_airline_credit_card", (req, res) => {
+  let params = req.body;
+  var sql = "SELECT * FROM AIRLINE_CREDIT_CARD \
+            WHERE userID = ?";
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      // '2'
+      params.userID
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+// sign user up for airline credit card
 app.post("/api/registered_user/credit_card_signup", (req, res) => {
   let params = req.body;
   var sql = "INSERT INTO AIRLINE_CREDIT_CARD (userID) \
@@ -312,7 +338,8 @@ app.post("/api/registered_user/credit_card_signup", (req, res) => {
     sql,
     [
       // TEST PARAMS
-     '2'
+      //  '2'
+      params.userID
     ],
     (err, result) => {
       if (err) {
@@ -325,6 +352,102 @@ app.post("/api/registered_user/credit_card_signup", (req, res) => {
   );
 });
 
+// check if user is signed up for promotions
+app.get("/api/registered_user/check_promotions", (req, res) => {
+  let params = req.body;
+  var sql = "SELECT * FROM PROMOTIONS \
+            WHERE userID = ?";
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      // '2'
+      params.userID
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+// sign user up for promotions
+app.post("/api/registered_user/promotion_signup", (req, res) => {
+  let params = req.body;
+  var sql = "INSERT INTO PROMOTIONS (userID) \
+            VALUES (?);";
+  con.query(
+    sql,
+    [
+      // TEST PARAMS
+      //  '2'
+      params.userID
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        res.status(200).json('Success');
+      } 
+    }
+  );
+});
+
+// check user companion ticket usages
+app.get("/api/registered_user/check_companion_tickets", (req, res) => {
+  let params = req.body;
+  var sql = "SELECT * FROM COMPANION_TICKETS \
+            WHERE userID = ? \
+            ORDER BY dateClaimed DESC;";
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      // '2'
+      params.userID
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+// add companion ticket usage
+app.post("/api/registered_user/use_companion_ticket", (req, res) => {
+  let params = req.body;
+  var sql = "INSERT INTO COMPANION_TICKETS (userID, dateClaimed) \
+            VALUES (?, ?);";
+  con.query(
+    sql,
+    [
+      // TEST PARAMS
+      //  '2',
+      //  '2023-12-01'
+      params.userID,
+      params.dateClaimed
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        res.status(200).json('Success');
+      } 
+    }
+  );
+});
+// ----------------------- END: ADDING AND MANAGING REGISTERED USERS ------------------------
+
+
+
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+

@@ -154,7 +154,7 @@ CREATE TABLE COMPANION_TICKETS (
 
 INSERT INTO COMPANION_TICKETS (userID, dateClaimed)
 VALUES
-(1, '2023-05-01'), (2, '2021-11-05');
+(1, '2023-05-01'), (2, '2021-11-05'), (2, '2022-06-05');
 
 DROP TABLE IF EXISTS BOOKING;
 CREATE TABLE BOOKING (
@@ -201,4 +201,6 @@ VALUES
 (1, '2B', 1),
 (1, '3C', 1);
 
-select * from airline_credit_card
+SELECT * FROM COMPANION_TICKETS 
+WHERE userID = 2
+ORDER BY dateClaimed asc;
