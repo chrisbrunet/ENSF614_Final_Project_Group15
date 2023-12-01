@@ -194,7 +194,7 @@ app.put("/api/flight/update_seat_availability", (req, res) => {
 
 // add seat to booking 
 app.post("/api/flight/add_seats_to_booking", (req, res) => {
-  let params = req.body;
+  let params = req.query;
   var sql = "INSERT INTO BOOKED_SEATS (bookingID, seatNo, flightID) \
             VALUES (?, ?, ?);";
   con.query(
@@ -251,10 +251,12 @@ app.post("/api/flight/add_payment_to_booking", (req, res) => {
 // ----------------------- START: SEARCH FOR AND CANCEL BOOKING BY USER ------------------------
 // get booking information from booking id and email
 app.get("/api/booking/get_booking", (req, res) => {
-  let params = req.body;
+  let params = req.query;
+  console.log(params);
+
   var sql = "SELECT b.bookingID, b.flightID, b.userEmail, b.insurance, \
             b.price, f.aircraftID, f.departCity, f.arriveCity, \
-            f.flightDate, count(seatNo) AS numSeats \
+            f.flightDate, count(bs.seatNo) AS numSeats \
             FROM BOOKING AS b \
             JOIN FLIGHT AS f \
             ON b.flightID = f.flightID \

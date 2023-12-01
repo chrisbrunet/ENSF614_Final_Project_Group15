@@ -1,6 +1,8 @@
-import React from 'react';
-import '../css/styles.css';
+import React, { useState } from 'react';
+import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const ManageBooking = () => {
     const navigate = useNavigate();
@@ -14,9 +16,33 @@ const ManageBooking = () => {
     };
 
     const handleCancelBooking = () => {
-        alert("cancelled booking.")
+        alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`)
     };
 
+    const formatDateString = (dateString) => {
+        const date = new Date(dateString);
+        return date.toISOString().substring(0, 10);
+    };
+
+    const [bookingCriteria, setBookingCriteria] = useState ({
+        bookingID: "",
+        userEmail: ""
+    });
+
+    const [searchResults, setSearchResults] = useState([]);
+
+    const searchBookings = () => {
+        axios.get("http://localhost:3001/api/booking/get_booking", {
+            params: bookingCriteria
+        })
+        .then((response) => {
+            console.log(response.data);
+            setSearchResults(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching Bookings:", error);
+        });
+    };
 
     return (
         <div>
@@ -31,15 +57,34 @@ const ManageBooking = () => {
                 <form onSubmit={handleSearchSubmit}>
                     <h2>Booking ID</h2>
                     <div className="input-group">
-                        <input type="text" id="bookingID" name="bookingID" required />
+                        <input  
+                            type="text" 
+                            id="bookingID" 
+                            name="bookingID" 
+                            value={bookingCriteria.bookingID}
+                            onChange={(e) => setBookingCriteria({ ...bookingCriteria, bookingID: e.target.value })}
+                            required 
+                        />
                     </div>
                     <h2>Email on Booking</h2>
                     <div class="input-group">
-                        <input type="text" id="email" name="email" required />
+                    <input  
+                            type="text" 
+                            id="email" 
+                            name="email" 
+                            value={bookingCriteria.userEmail}
+                            onChange={(e) => setBookingCriteria({ ...bookingCriteria, userEmail: e.target.value })}
+                            required 
+                        />
                     </div>
-                    <button type="submit" className="btn">
-                        Search
-                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault(); 
+                            searchBookings();
+                        }}
+                        type="button" 
+                        className="btn"
+                    >Search Bookings</button>
                 </form>
             </div>
 
@@ -52,23 +97,25 @@ const ManageBooking = () => {
                         <th>Departure City</th>
                         <th>Arrival City</th>
                         <th>Date</th>
-                        <th>Tickets</th>
+                        <th>Seats</th>
+                        <th>Price</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Example</td>
-                        <td>New York</td>
-                        <td>Los Angeles</td>
-                        <td>2023-11-25</td>
-                        <td>3</td>
-                        <td>
-                            <button onClick={handleCancelBooking} className="btn">
-                                Cancel Booking
-                            </button>
-                        </td>
-                    </tr>
+                        {searchResults.map((booking) => (
+                            <tr key={booking.flightID}>
+                                <td>{booking.flightID}</td>
+                                <td>{booking.departCity}</td>
+                                <td>{booking.arriveCity}</td>
+                                <td>{formatDateString(booking.flightDate)}</td>
+                                <td>{booking.numSeats}</td>
+                                <td>{booking.price}</td>
+                                <td>
+                                    <button onClick={() => { handleCancelBooking() }} className="btn">Cancel Booking</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
