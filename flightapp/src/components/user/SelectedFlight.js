@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/styles.css';
 import styled from 'styled-components';
+import axios from 'axios';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const StyledTable = styled.table`
   border-collapse: collapse;
@@ -29,6 +30,27 @@ const SelectedFlight = () => {
     const handleHomeButton = () => {
         navigate('/Home');
     };
+
+    const { flightID } = useParams();
+
+    const getFlightInfo = (flightID) => {
+        console.log(flightID);
+        axios.get(`http://localhost:3001/api/search_flights_by_id`, 
+        {params: {
+            flightID: flightID
+          }
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.error("Error fetching flight details:", error);
+        });
+    };
+
+    useEffect(() => {
+       getFlightInfo(flightID);
+    }, [flightID]);
 
     const [selectedSeatIds, setSelectedSeatIds] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);

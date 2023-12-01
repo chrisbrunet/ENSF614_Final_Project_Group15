@@ -19,7 +19,7 @@ const Navigation = () => {
             <Route exact path="/userProfile" element={<UserProfile/>} />
             <Route exact path="/adminHome" element={<AdminHome/>} />
             <Route exact path="/adminLogin" element={<AdminLogin/>} />
-            <Route exact path="/selectFlight" element={<SelectedFlight/>} />
+            <Route exact path="/selectFlight/:flightID" element={<SelectedFlight />} />            
             <Route exact path="/manageBooking" element={<ManageBooking/>} />
             <Route exact path="/agentLogin" element={<AgentLogin/>} />
             <Route exact path="/agentHome" element={<AgentHome/>} />

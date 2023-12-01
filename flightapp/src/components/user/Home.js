@@ -14,12 +14,14 @@ const Home = () => {
         navigate('/adminLogin');
     };
 
-    const handleSelectFlightButton = () => {
-        navigate('/selectFlight');
+    const handleSelectFlightButton = (flightID) => {
+        navigate(`/selectFlight/${flightID}`);
     };
+
     const handleManageBookingButton = () => {
         navigate('/manageBooking');
     };
+
     const handleAgentLoginButton = () => {
         navigate('/agentLogin');
     };
@@ -140,7 +142,7 @@ const Home = () => {
                                 <td>{flight.arriveCity}</td>
                                 <td>{formatDateString(flight.flightDate)}</td>
                                 <td>
-                                    <button onClick={() => { handleSelectFlightButton() }} className="btn">Select Flight</button>
+                                    <button onClick={() => { handleSelectFlightButton(flight.flightID) }} className="btn">Select Flight</button>
                                 </td>
                             </tr>
                         ))}

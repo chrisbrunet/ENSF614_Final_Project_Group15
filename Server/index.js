@@ -63,7 +63,8 @@ app.get("/api/search_flights_by_criteria", (req, res) => {
 
 // Get flight by ID
 app.get("/api/search_flights_by_id", (req, res) => {
-  let params = req.body;
+  let params = req.query;
+  console.log(params);
   var sql = "SELECT * FROM FLIGHT WHERE flightID = ?;"
   con.query(
     sql, 
