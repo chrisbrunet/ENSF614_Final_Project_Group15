@@ -64,7 +64,6 @@ app.get("/api/search_flights_by_criteria", (req, res) => {
 // Get flight by ID
 app.get("/api/search_flights_by_id", (req, res) => {
   let params = req.query;
-  console.log(params);
   var sql = "SELECT * FROM FLIGHT WHERE flightID = ?;"
   con.query(
     sql, 
@@ -124,6 +123,32 @@ app.get("/api/flight/seat_availability_type_price", (req, res) => {
       // '2A'
       params.flightID,
       params.seatNo
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+// similar to above endpoint but gets all seats on plane
+app.get("/api/flight/seatmap", (req, res) => {
+  let params = req.query;
+  var sql = "SELECT s.seatNo, f.flightID, s.availability, s.seatType, f.basePrice*p.priceMultiplier AS seatPrice \
+            FROM FLIGHT AS f \
+            JOIN SEATS AS s \
+            ON f.flightID = s.flightID \
+            JOIN SEAT_TYPE_PRICES AS p \
+            ON s.seatType = p.seatType \
+            WHERE f.flightID = ?;"
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      // '1',
+      params.flightID
     ],
   (err, result) => {
     if (err) {

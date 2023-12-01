@@ -8,15 +8,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 const StyledTable = styled.table`
   border-collapse: collapse;
   margin-top: 20px;
+  margin-left: 15px;
+  margin-right: auto;
 `;
 
 const StyledTableCell = styled.td`
   border: 1px solid #000;
-  width: 10px;
-  height: 10px;
+  width: 30px; 
+  height: 30px;
   text-align: center;
   cursor: pointer;
   font-size: 12px;
+  vertical-align: middle;
 
   &.selected {
     background-color: #007bff;
@@ -33,6 +36,10 @@ const SelectedFlight = () => {
 
     const { flightID } = useParams();
 
+    const [flightInfo, setFlightInfo] = useState([]);
+
+    const [seatData, setSeatData] = useState([]);
+
     const getFlightInfo = (flightID) => {
         axios.get(`http://localhost:3001/api/search_flights_by_id`, 
         {params: {
@@ -40,15 +47,32 @@ const SelectedFlight = () => {
           }
         })
         .then((response) => {
-            console.log(response);
+            console.log(response.data);
+            setFlightInfo(response.data);
         })
         .catch((error) => {
             console.error("Error fetching flight details:", error);
         });
     };
 
+    const getSeatMap = (flightID) => {
+        axios.get(`http://localhost:3001/api/flight/seatmap`, 
+        {params: {
+            flightID: flightID
+          }
+        })
+        .then((response) => {
+            console.log(response.data);
+            setSeatData(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching seat details:", error);
+        });
+    };
+
     useEffect(() => {
        getFlightInfo(flightID);
+       getSeatMap(flightID);
     }, [flightID]);
 
     const [selectedSeatIds, setSelectedSeatIds] = useState([]);
@@ -89,34 +113,37 @@ const SelectedFlight = () => {
     };
 
     const seatTableBody = [];
-    for (let i = 1; i <= 20; i++) {
-        const row = [];
+    let row = [];
 
-        for (let j = 1; j <= 7; j++) {
-            if (j === 4) {
-                row.push(<StyledTableCell key={`row${i}col${j}`} className="aisle"></StyledTableCell>);
-            } else {
-                const seatId = `Seat ${i + String.fromCharCode(64 + j - (j > 4 ? 2 : 0))}`;
-                row.push(
-                    <StyledTableCell
-                        key={`row${i}col${j}`}
-                        onClick={() => toggleSeat(seatId)}
-                        className={selectedSeatIds.includes(seatId) ? 'selected' : ''}
-                    >
-                        {seatId}
-                    </StyledTableCell>
-                );
-            }
-        }
+    seatData.forEach((seatInfo, index) => {
+    const seatId = seatInfo.seatNo;
+    const isAvailable = seatInfo.availability === 0;
 
-        seatTableBody.push(<tr key={`row${i}`}>{row}</tr>);
+    const seatCell = (
+        <StyledTableCell
+        key={`row${index + 1}col${index + 1}`}
+        onClick={() => isAvailable && toggleSeat(seatId)}
+        className={selectedSeatIds.includes(seatId) ? 'selected' : isAvailable ? '' : 'unavailable'}
+        style={{ backgroundColor: isAvailable ? '' : 'red', cursor: isAvailable ? 'pointer' : 'not-allowed' }}
+        >
+        {seatId}
+        </StyledTableCell>
+    );
+
+    row.push(seatCell);
+
+    if (row.length === 6 || index === seatData.length - 1) {
+        seatTableBody.push(<tr key={`row${seatTableBody.length + 1}`}>{[...row]}</tr>);
+        row = [];
     }
+    });
 
     return (
         <div>
             <div className="navbar">
-                <h1>Flight ####</h1>
-                <button onClick={handleHomeButton} className="btn">
+            <h1>Flight {flightInfo.length > 0 ? flightInfo[0].flightID : 'Loading...'} from {flightInfo.length > 0 ? flightInfo[0].departCity : 'Loading...'} to {flightInfo.length > 0 ? flightInfo[0].arriveCity : 'Loading...'}
+            </h1>                
+            <button onClick={handleHomeButton} className="btn">
                     Home
                 </button>
             </div>
