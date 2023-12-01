@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Home = () => {
     const navigate = useNavigate();
+
     const handleAccessPortal = () => {
         navigate('/userPortal');
     };
@@ -23,11 +24,18 @@ const Home = () => {
         navigate('/agentLogin');
     };
 
+    const formatDateString = (dateString) => {
+        const date = new Date(dateString);
+        return date.toISOString().substring(0, 10);
+    };
+
     const [flightCritera, setFlightCritera] = useState ({
         departCity: "",
         arriveCity: "",
         flightDate: ""
     });
+
+    const [searchResults, setSearchResults] = useState([]);
 
     const searchFlights = () => {
         axios.get("http://localhost:3001/api/search_flights_by_criteria", {
@@ -35,11 +43,27 @@ const Home = () => {
         })
         .then((response) => {
             console.log(response.data);
+            setSearchResults(response.data);
         })
         .catch((error) => {
             console.error("Error fetching flights:", error);
         });
     };
+
+    const getAllFlights = () => {
+        axios.get("http://localhost:3001/api/all_flights")
+        .then((response) => {
+            console.log(response.data);
+            setSearchResults(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching flights:", error);
+        });
+    };
+
+    useEffect(() => {
+        getAllFlights(); 
+    }, []);
 
     return (
         <div>
@@ -87,10 +111,10 @@ const Home = () => {
                     </div>
                     <button
                         onClick={(e) => {
-                            e.preventDefault(); // Prevent form submission
+                            e.preventDefault(); 
                             searchFlights();
                         }}
-                        type="button" // Set the button type to "button" to prevent form submission
+                        type="button" 
                         className="btn"
                     >Search Flights</button>
                 </form>
@@ -100,52 +124,26 @@ const Home = () => {
                 <h2>Available Flights</h2>
                 <table className="flight-table">
                     <thead>
-                    <tr>
-                        <th>Flight Number</th>
-                        <th>Departure City</th>
-                        <th>Arrival City</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th>Flight Number</th>
+                            <th>Departure City</th>
+                            <th>Arrival City</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Example</td>
-                        <td>New York</td>
-                        <td>Los Angeles</td>
-                        <td>2023-11-25</td>
-                        <td>
-                            <button onClick={() => { handleSelectFlightButton() }} className="btn">Select Flight
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>FL123</td>
-                        <td>Calgary</td>
-                        <td>Toronto</td>
-                        <td>2023-12-01</td>
-                        <td>
-                            <button className="btn">Select Flight</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>FL124</td>
-                        <td>Vancouver</td>
-                        <td>Tokyo</td>
-                        <td>2023-12-05</td>
-                        <td>
-                            <button className="btn">Select Flight</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>FL125</td>
-                        <td>Los Angeles</td>
-                        <td>Space</td>
-                        <td>2023-12-05</td>
-                        <td>
-                            <button className="btn">Select Flight</button>
-                        </td>
-                    </tr>
+                        {searchResults.map((flight) => (
+                            <tr key={flight.flightID}>
+                                <td>{flight.flightID}</td>
+                                <td>{flight.departCity}</td>
+                                <td>{flight.arriveCity}</td>
+                                <td>{formatDateString(flight.flightDate)}</td>
+                                <td>
+                                    <button onClick={() => { handleSelectFlightButton() }} className="btn">Select Flight</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
