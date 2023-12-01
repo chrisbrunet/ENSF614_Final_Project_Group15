@@ -84,20 +84,20 @@ VALUES
 ('2A', 1, 'Comfort'), ('2B', 1, 'Comfort'), ('2C', 1, 'Comfort'), ('2D', 1, 'Comfort'), ('2E', 1, 'Comfort'), ('2F', 1, 'Comfort'), 
 ('3A', 1, 'Ordinary'), ('3B', 1, 'Ordinary'), ('3C', 1, 'Ordinary'), ('3D', 1, 'Ordinary'), ('3E', 1, 'Ordinary'), ('3F', 1, 'Ordinary');
 
-DROP TABLE IF EXISTS USER;
-CREATE TABLE USER (
-    email varchar(20) not null,
-    primary key (email)
-);
+-- DROP TABLE IF EXISTS USER;
+-- CREATE TABLE USER (
+--     email varchar(50) not null,
+--     primary key (email)
+-- );
 
-INSERT INTO USER (email)
-VALUES
-('johndoe@gmail.com'),
-('cb123@gmail.com'),
-('billgates@icloud.com'),
-('tomcruise@gmail.com'),
-('example@gmail.com'),
-('coolguy@gmail.com');
+-- INSERT INTO USER (email)
+-- VALUES
+-- ('johndoe@gmail.com'),
+-- ('cb123@gmail.com'),
+-- ('billgates@icloud.com'),
+-- ('tomcruise@gmail.com'),
+-- ('example@gmail.com'),
+-- ('coolguy@gmail.com');
 
 DROP TABLE IF EXISTS REGISTERED_USER;
 CREATE TABLE REGISTERED_USER (
@@ -109,7 +109,6 @@ CREATE TABLE REGISTERED_USER (
     birthdate date not null,
     password varchar(20) not null,
     primary key (userID)
-    #foreign key (email) references USER(email)
 );
 
 INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password)
@@ -161,16 +160,16 @@ DROP TABLE IF EXISTS BOOKING;
 CREATE TABLE BOOKING (
     bookingID int not null auto_increment,
     flightID int not null,
-    userEmail varchar(20) not null,
-    insurance int not null default(0),
+    userEmail varchar(50) not null,
+    insurance int not null,
+    price decimal(10,2) not null,
     primary key (bookingID),
-    foreign key (flightID) references FLIGHT(flightID),
-    foreign key (userEmail) references USER(email)
+    foreign key (flightID) references FLIGHT(flightID)
 );
 
-INSERT INTO BOOKING (flightID, userEmail)
+INSERT INTO BOOKING (flightID, userEmail, insurance, price)
 VALUES
-(1, 'johndoe@gmail.com');
+(1, 'johndoe@gmail.com', 1, '500.00');
 
 DROP TABLE IF EXISTS PAYMENT;
 CREATE TABLE PAYMENT (
@@ -201,12 +200,3 @@ VALUES
 (1, '1A', 1),
 (1, '2B', 1),
 (1, '3C', 1);
-
-SELECT seatNo, f.flightID, availability, seatType, basePrice*priceMultiplier AS seatPrice
-FROM FLIGHT AS f
-JOIN SEATS AS s
-ON f.flightID = s.flightID
-JOIN SEAT_TYPE_PRICES AS p
-ON s.seatType = p.seatType
-WHERE f.flightID = 1 AND seatNo = '1A'
-

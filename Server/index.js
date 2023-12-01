@@ -131,26 +131,52 @@ app.get("/api/flight/seat_availability_type_price", (req, res) => {
   });
 });
 
+// create new booking
 app.post("/api/flight/new_booking", (req, res) => {
-  let user = req.body;
+  let params = req.body;
   var sql =
-    "INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password) VALUES (?,?,?,?,?,?);";
+    "INSERT INTO BOOKING (flightID, userEmail, insurance, price) \
+    VALUES (?, ?, ?, ?);";
   con.query(
     sql,
     [
       // TEST PARAMS
+      // '1',
       // 'testfromapi@gmail.com',
-      // 'Chris',
-      // 'Brunet',
-      // '123 Calg AB',
-      // '1996-11-06',
-      // 'password123'
-      user.email,
-      user.firstName,
-      user.lastName,
-      user.address,
-      user.birthdate,
-      user.password
+      // '1', 
+      // '550.00'
+      params.flightID,
+      params.userEmail,
+      params.insurance,
+      params.price
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        res.status(200).json('Success');
+      } 
+    }
+  );
+});
+
+// update a seat availability
+app.put("/api/flight/update_seat_availability", (req, res) => {
+  let params = req.body;
+  var sql = "UPDATE FLIGHT AS f \
+            JOIN SEATS AS s \
+            ON f.flightID = s.flightID \
+            SET s.availability = 1 \
+            WHERE f.flightID = ? and s.seatNO = ?;";
+  con.query(
+    sql,
+    [
+      // TEST PARAMS
+      // '1',
+      // '2B'
+      params.flightID,
+      params.seatNO
     ],
     (err, result) => {
       if (err) {
