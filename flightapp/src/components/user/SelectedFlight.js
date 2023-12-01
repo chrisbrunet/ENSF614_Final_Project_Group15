@@ -34,7 +34,6 @@ const SelectedFlight = () => {
     const { flightID } = useParams();
 
     const getFlightInfo = (flightID) => {
-        console.log(flightID);
         axios.get(`http://localhost:3001/api/search_flights_by_id`, 
         {params: {
             flightID: flightID

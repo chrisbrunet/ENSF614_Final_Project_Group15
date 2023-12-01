@@ -252,7 +252,6 @@ app.post("/api/flight/add_payment_to_booking", (req, res) => {
 // get booking information from booking id and email
 app.get("/api/booking/get_booking", (req, res) => {
   let params = req.query;
-  console.log(params);
 
   var sql = "SELECT b.bookingID, b.flightID, b.userEmail, b.insurance, \
             b.price, f.aircraftID, f.departCity, f.arriveCity, \
@@ -290,8 +289,8 @@ app.get("/api/booking/get_booked_seats", (req, res) => {
     sql, 
     [
       // TEST PARAMS
-      '1'
-      // params.bookingID
+      // '1'
+      params.bookingID
     ],
   (err, result) => {
     if (err) {
@@ -328,15 +327,15 @@ app.put("/api/booking/revert_seat_availability", (req, res) => {
 
 // cancel booking, cascades to BOOKING_SEATS and PAYMENT
 app.put("/api/booking/cancel_booking", (req, res) => {
-  let params = req.body;
+  let params = req.query;
   var sql = "DELETE FROM BOOKING \
             WHERE bookingID = ?;"; 
   con.query(
     sql, 
     [
       // TEST PARAMS
-      '2'
-      // params.bookingID
+      // '2'
+      params.bookingID
     ],
   (err, result) => {
     if (err) {

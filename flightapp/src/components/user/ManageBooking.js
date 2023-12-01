@@ -15,8 +15,10 @@ const ManageBooking = () => {
         alert("search")
     };
 
-    const handleCancelBooking = () => {
+    const handleCancelBooking = (bookingID) => {
         alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`)
+        cancelBooking(bookingID);
+        searchBookings();
     };
 
     const formatDateString = (dateString) => {
@@ -36,11 +38,21 @@ const ManageBooking = () => {
             params: bookingCriteria
         })
         .then((response) => {
-            console.log(response.data);
             setSearchResults(response.data);
         })
         .catch((error) => {
             console.error("Error fetching Bookings:", error);
+        });
+    };
+
+    const cancelBooking = (bookingID) => {
+        console.log(bookingID)
+        axios.put(`http://localhost:3001/api/booking/cancel_booking?bookingID=${bookingID}`)
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.error("Error cancelling Booking:", error);
         });
     };
 
@@ -103,8 +115,9 @@ const ManageBooking = () => {
                     </tr>
                     </thead>
                     <tbody>
-                        {searchResults.map((booking) => (
-                            <tr key={booking.flightID}>
+                    {searchResults.map((booking) => (
+                        booking.numSeats > 0 && (
+                            <tr key={booking.bookingID}>
                                 <td>{booking.flightID}</td>
                                 <td>{booking.departCity}</td>
                                 <td>{booking.arriveCity}</td>
@@ -112,10 +125,11 @@ const ManageBooking = () => {
                                 <td>{booking.numSeats}</td>
                                 <td>{booking.price}</td>
                                 <td>
-                                    <button onClick={() => { handleCancelBooking() }} className="btn">Cancel Booking</button>
+                                    <button onClick={() => { handleCancelBooking(booking.bookingID) }} className="btn">Cancel Booking</button>
                                 </td>
                             </tr>
-                        ))}
+                        )
+                    ))}
                     </tbody>
                 </table>
             </div>
