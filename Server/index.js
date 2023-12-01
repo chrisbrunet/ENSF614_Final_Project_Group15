@@ -351,34 +351,33 @@ app.put("/api/booking/cancel_booking", (req, res) => {
 // Add new registered user
 app.post("/api/registered_user/new_user", (req, res) => {
   let params = req.body;
-  console.log('test user login');
   var sql = "INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password) \
             VALUES (?,?,?,?,?,?);";
   con.query(
-    sql,
-    [
-      // TEST PARAMS
-      // 'apitest@gmail.com',
-      // 'Christope',
-      // 'Brunette',
-      // '123 Calg AB',
-      // '1996-11-06',
-      // 'password1234567'
-      params.email,
-      params.firstName,
-      params.lastName,
-      params.address,
-      params.birthdate,
-      params.password
-    ],
-    (err, result) => {
-      if (err) {
-        res.status(500).send(err);
+      sql,
+      [
+        // TEST PARAMS
+        // 'apitest@gmail.com',
+        // 'Christope',
+        // 'Brunette',
+        // '123 Calg AB',
+        // '1996-11-06',
+        // 'password1234567'
+        params.email,
+        params.firstName,
+        params.lastName,
+        params.address,
+        params.birthdate,
+        params.password
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Database error:", err);
+          res.status(500).json({ success: false, error: "Internal server error" });
+        } else {
+          res.json({ success: true, result });
+        }
       }
-      else {
-        res.send(result)
-      } 
-    }
   );
 });
 
