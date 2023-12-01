@@ -203,3 +203,11 @@ VALUES
 (1, '3C', 1),
 (2, '1B', 1),
 (2, '1C', 1);
+
+
+UPDATE SEATS
+SET availability = 1
+where flightID = 1 and seatNo = '1A';
+
+select * from SEATS 
+where flightID = 1 and seatNo = '1A';

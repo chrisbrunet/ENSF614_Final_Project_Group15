@@ -15,9 +15,11 @@ const ManageBooking = () => {
         alert("search")
     };
 
-    const handleCancelBooking = (bookingID) => {
+    const handleCancelBooking = async (bookingID) => {
         alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`)
-        cancelBooking(bookingID);
+        getBookedSeats(bookingID);
+        revertSeatAvailability();
+        await cancelBooking(bookingID);
         searchBookings();
     };
 
@@ -33,6 +35,8 @@ const ManageBooking = () => {
 
     const [searchResults, setSearchResults] = useState([]);
 
+    const [bookedSeats, setBookedSeats] = useState([]);
+
     const searchBookings = () => {
         axios.get("http://localhost:3001/api/booking/get_booking", {
             params: bookingCriteria
@@ -45,14 +49,40 @@ const ManageBooking = () => {
         });
     };
 
-    const cancelBooking = (bookingID) => {
-        console.log(bookingID)
+    const cancelBooking = async (bookingID) => {
         axios.put(`http://localhost:3001/api/booking/cancel_booking?bookingID=${bookingID}`)
         .then((response) => {
+            console.log("Cancel successful");
             console.log(response);
         })
         .catch((error) => {
             console.error("Error cancelling Booking:", error);
+        });
+    };
+
+    const getBookedSeats = (bookingID) => {
+        axios.get(`http://localhost:3001/api/booking/get_booked_seats?bookingID=${bookingID}`)
+        .then((response) => {
+            console.log(response);
+            setBookedSeats(response.data);
+        })
+        .catch((error) => {
+            console.error("Error getting booked seats:", error);
+        });
+    };
+
+    const revertSeatAvailability = () => {
+        console.log(bookedSeats);
+        bookedSeats.forEach((seat) => {
+            const { flightID, seatNo } = seat;
+            axios.put(`http://localhost:3001/api/booking/revert_seat_availability?seatNo=${seatNo}&flightID=${flightID}`)
+            .then((response) => {
+                console.log("Seat reverted");
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error("Error reverting seats:", error);
+            });
         });
     };
 
@@ -79,7 +109,7 @@ const ManageBooking = () => {
                         />
                     </div>
                     <h2>Email on Booking</h2>
-                    <div class="input-group">
+                    <div className="input-group">
                     <input  
                             type="text" 
                             id="email" 

@@ -282,7 +282,7 @@ app.get("/api/booking/get_booking", (req, res) => {
 
 // get list of seats on booking
 app.get("/api/booking/get_booked_seats", (req, res) => {
-  let params = req.body;
+  let params = req.query;
   var sql = "SELECT * FROM BOOKED_SEATS \
             WHERE bookingID = ?"; 
   con.query(
@@ -303,7 +303,7 @@ app.get("/api/booking/get_booked_seats", (req, res) => {
 
 // update seats status to available: used when user is cancelling a booking. you will have to loop through each seat.
 app.put("/api/booking/revert_seat_availability", (req, res) => {
-  let params = req.body;
+  let params = req.query;
   var sql = "UPDATE SEATS \
             SET availability = 0 \
             WHERE seatNo = ? AND flightID = ?"; 
