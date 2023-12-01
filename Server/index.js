@@ -156,7 +156,7 @@ app.post("/api/flight/new_booking", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -184,7 +184,7 @@ app.put("/api/flight/update_seat_availability", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -211,7 +211,7 @@ app.post("/api/flight/add_seats_to_booking", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -238,7 +238,7 @@ app.post("/api/flight/add_payment_to_booking", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -246,8 +246,103 @@ app.post("/api/flight/add_payment_to_booking", (req, res) => {
 // ----------------------- END: SELECTING FLIGHT AND BOOKING TICKETS ------------------------
 
 
-// ----------------------- START: SEARCH FOR AND CANCELLING BOOKING BY USER ------------------------
+// ----------------------- START: SEARCH FOR AND CANCEL BOOKING BY USER ------------------------
+// get booking information from booking id and email
+app.get("/api/booking/get_booking", (req, res) => {
+  let params = req.body;
+  var sql = "SELECT b.bookingID, b.flightID, b.userEmail, b.insurance, \
+            b.price, f.aircraftID, f.departCity, f.arriveCity, \
+            f.flightDate, count(seatNo) AS numSeats \
+            FROM BOOKING AS b \
+            JOIN FLIGHT AS f \
+            ON b.flightID = f.flightID \
+            JOIN BOOKED_SEATS AS bs \
+            ON b.bookingID = bs.bookingID \
+            WHERE b.bookingID = ? AND b.userEmail = ?;"; 
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      // '1',
+      // 'johndoe@gmail.com'
+      params.bookingID,
+      params.userEmail
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
 
+// get list of seats on booking
+app.get("/api/booking/get_booked_seats", (req, res) => {
+  let params = req.body;
+  var sql = "SELECT * FROM BOOKED_SEATS \
+            WHERE bookingID = ?"; 
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      '1'
+      // params.bookingID
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+// update seats status to available: used when user is cancelling a booking. you will have to loop through each seat.
+app.put("/api/booking/revert_seat_availability", (req, res) => {
+  let params = req.body;
+  var sql = "UPDATE SEATS \
+            SET availability = 0 \
+            WHERE seatNo = ? AND flightID = ?"; 
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      // '1A',
+      // '1'
+      params.seatNo,
+      params.flightID
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+// cancel booking, cascades to BOOKING_SEATS and PAYMENT
+app.put("/api/booking/cancel_booking", (req, res) => {
+  let params = req.body;
+  var sql = "DELETE FROM BOOKING \
+            WHERE bookingID = ?;"; 
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      '2'
+      // params.bookingID
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+// ----------------------- END: SEARCH FOR AND CANCEL BOOKING BY USER ------------------------
 
 
 
@@ -261,12 +356,12 @@ app.post("/api/registered_user/new_user", (req, res) => {
     sql,
     [
       // TEST PARAMS
-      // 'testfromapi@gmail.com',
-      // 'Chris',
-      // 'Brunet',
+      // 'apitest@gmail.com',
+      // 'Christope',
+      // 'Brunette',
       // '123 Calg AB',
       // '1996-11-06',
-      // 'password123'
+      // 'password1234567'
       params.email,
       params.firstName,
       params.lastName,
@@ -279,7 +374,7 @@ app.post("/api/registered_user/new_user", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -346,7 +441,7 @@ app.post("/api/registered_user/credit_card_signup", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -390,7 +485,7 @@ app.post("/api/registered_user/promotion_signup", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );
@@ -437,7 +532,7 @@ app.post("/api/registered_user/use_companion_ticket", (req, res) => {
         res.status(500).send(err);
       }
       else {
-        res.status(200).json('Success');
+        res.send(result)
       } 
     }
   );

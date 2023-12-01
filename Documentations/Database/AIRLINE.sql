@@ -169,7 +169,8 @@ CREATE TABLE BOOKING (
 
 INSERT INTO BOOKING (flightID, userEmail, insurance, price)
 VALUES
-(1, 'johndoe@gmail.com', 1, '500.00');
+(1, 'johndoe@gmail.com', 1, '500.00'),
+(1, 'cb123@gmail.com', 0, '200.00');
 
 DROP TABLE IF EXISTS PAYMENT;
 CREATE TABLE PAYMENT (
@@ -178,7 +179,7 @@ CREATE TABLE PAYMENT (
     cardNo long,
     status int not null default(0),
     primary key (paymentID),
-    foreign key (bookingID) references BOOKING(bookingID)
+    foreign key (bookingID) references BOOKING(bookingID) ON DELETE CASCADE
 );
 
 INSERT INTO PAYMENT (bookingID, cardNo, status)
@@ -191,7 +192,7 @@ CREATE TABLE BOOKED_SEATS (
     seatNo varchar(20) not null,
     flightID int not null,
     primary key (bookingID, seatNo, flightID),
-    foreign key (bookingID) references BOOKING(bookingID),
+    foreign key (bookingID) references BOOKING(bookingID) ON DELETE CASCADE,
     foreign key (seatNo, flightID) references SEATS(seatNo, flightID)
 );
 
@@ -199,8 +200,6 @@ INSERT INTO BOOKED_SEATS (bookingID, seatNo, flightID)
 VALUES
 (1, '1A', 1),
 (1, '2B', 1),
-(1, '3C', 1);
-
-SELECT * FROM COMPANION_TICKETS 
-WHERE userID = 2
-ORDER BY dateClaimed asc;
+(1, '3C', 1),
+(2, '1B', 1),
+(2, '1C', 1);
