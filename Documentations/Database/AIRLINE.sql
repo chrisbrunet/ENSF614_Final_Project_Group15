@@ -52,7 +52,13 @@ VALUES
 (3, 'Calgary', 'Vancouver', '2023-12-05', 80.00), 
 (4, 'Vancouver', 'Calgary', '2023-12-05', 80.00), 
 (5, 'Vancouver', 'Toronto', '2023-12-05', 200.00), 
-(6, 'Toronto', 'Vancouver', '2023-12-05', 200.00);
+(6, 'Toronto', 'Vancouver', '2023-12-05', 200.00),
+(1, 'Calgary', 'Winnipeg', '2023-12-06', 300.00),
+(2, 'Calgary', 'Saskatoon', '2023-12-06', 100.00),
+(3, 'Winnipeg', 'Vancouver', '2023-12-06', 200.00),
+(4, 'Toronto', 'Montreal', '2023-12-07', 100.00),
+(5, 'Montreal', 'St. Johns', '2023-12-08', 400.00),
+(6, 'Calgary', 'Whitehorse', '2023-12-09', 300.00);
 
 DROP TABLE IF EXISTS SEAT_TYPE_PRICES;
 CREATE TABLE SEAT_TYPE_PRICES (
@@ -81,8 +87,25 @@ CREATE TABLE SEATS (
 INSERT INTO SEATS(seatNo, flightID, seatType)
 VALUES
 ('1A', 1, 'Business'), ('1B', 1, 'Business'), ('1C', 1, 'Business'), ('1D', 1, 'Business'), ('1E', 1, 'Business'), ('1F', 1, 'Business'), 
-('2A', 1, 'Comfort'), ('2B', 1, 'Comfort'), ('2C', 1, 'Comfort'), ('2D', 1, 'Comfort'), ('2E', 1, 'Comfort'), ('2F', 1, 'Comfort'), 
-('3A', 1, 'Ordinary'), ('3B', 1, 'Ordinary'), ('3C', 1, 'Ordinary'), ('3D', 1, 'Ordinary'), ('3E', 1, 'Ordinary'), ('3F', 1, 'Ordinary');
+('2A', 1, 'Business'), ('2B', 1, 'Business'), ('2C', 1, 'Business'), ('2D', 1, 'Business'), ('2E', 1, 'Business'), ('2F', 1, 'Business'), 
+('3A', 1, 'Business'), ('3B', 1, 'Business'), ('3C', 1, 'Business'), ('3D', 1, 'Business'), ('3E', 1, 'Business'), ('3F', 1, 'Business'),
+('4A', 1, 'Business'), ('4B', 1, 'Business'), ('4C', 1, 'Business'), ('4D', 1, 'Business'), ('4E', 1, 'Business'), ('4F', 1, 'Business'), 
+('5A', 1, 'Business'), ('5B', 1, 'Business'), ('5C', 1, 'Business'), ('5D', 1, 'Business'), ('5E', 1, 'Business'), ('5F', 1, 'Business'), 
+('6A', 1, 'Comfort'), ('6B', 1, 'Comfort'), ('6C', 1, 'Comfort'), ('6D', 1, 'Comfort'), ('6E', 1, 'Comfort'), ('6F', 1, 'Comfort'), 
+('7A', 1, 'Comfort'), ('7B', 1, 'Comfort'), ('7C', 1, 'Comfort'), ('7D', 1, 'Comfort'), ('7E', 1, 'Comfort'), ('7F', 1, 'Comfort'), 
+('8A', 1, 'Comfort'), ('8B', 1, 'Comfort'), ('8C', 1, 'Comfort'), ('8D', 1, 'Comfort'), ('8E', 1, 'Comfort'), ('8F', 1, 'Comfort'), 
+('9A', 1, 'Comfort'), ('9B', 1, 'Comfort'), ('9C', 1, 'Comfort'), ('9D', 1, 'Comfort'), ('9E', 1, 'Comfort'), ('9F', 1, 'Comfort'), 
+('10A', 1, 'Comfort'), ('10B', 1, 'Comfort'), ('10C', 1, 'Comfort'), ('10D', 1, 'Comfort'), ('10E', 1, 'Comfort'), ('10F', 1, 'Comfort'),
+('11A', 1, 'Ordinary'), ('11B', 1, 'Ordinary'), ('11C', 1, 'Ordinary'), ('11D', 1, 'Ordinary'), ('11E', 1, 'Ordinary'), ('11F', 1, 'Ordinary'), 
+('12A', 1, 'Ordinary'), ('12B', 1, 'Ordinary'), ('12C', 1, 'Ordinary'), ('12D', 1, 'Ordinary'), ('12E', 1, 'Ordinary'), ('12F', 1, 'Ordinary'), 
+('13A', 1, 'Ordinary'), ('13B', 1, 'Ordinary'), ('13C', 1, 'Ordinary'), ('13D', 1, 'Ordinary'), ('13E', 1, 'Ordinary'), ('13F', 1, 'Ordinary'), 
+('14A', 1, 'Ordinary'), ('14B', 1, 'Ordinary'), ('14C', 1, 'Ordinary'), ('14D', 1, 'Ordinary'), ('14E', 1, 'Ordinary'), ('14F', 1, 'Ordinary'), 
+('15A', 1, 'Ordinary'), ('15B', 1, 'Ordinary'), ('15C', 1, 'Ordinary'), ('15D', 1, 'Ordinary'), ('15E', 1, 'Ordinary'), ('15F', 1, 'Ordinary'), 
+('16A', 1, 'Ordinary'), ('16B', 1, 'Ordinary'), ('16C', 1, 'Ordinary'), ('16D', 1, 'Ordinary'), ('16E', 1, 'Ordinary'), ('16F', 1, 'Ordinary'), 
+('17A', 1, 'Ordinary'), ('17B', 1, 'Ordinary'), ('17C', 1, 'Ordinary'), ('17D', 1, 'Ordinary'), ('17E', 1, 'Ordinary'), ('17F', 1, 'Ordinary'), 
+('18A', 1, 'Ordinary'), ('18B', 1, 'Ordinary'), ('18C', 1, 'Ordinary'), ('18D', 1, 'Ordinary'), ('18E', 1, 'Ordinary'), ('18F', 1, 'Ordinary'), 
+('19A', 1, 'Ordinary'), ('19B', 1, 'Ordinary'), ('19C', 1, 'Ordinary'), ('19D', 1, 'Ordinary'), ('19E', 1, 'Ordinary'), ('19F', 1, 'Ordinary'), 
+('20A', 1, 'Ordinary'), ('20B', 1, 'Ordinary'), ('20C', 1, 'Ordinary'), ('20D', 1, 'Ordinary'), ('20E', 1, 'Ordinary'), ('20F', 1, 'Ordinary');
 
 -- DROP TABLE IF EXISTS USER;
 -- CREATE TABLE USER (
@@ -170,7 +193,12 @@ CREATE TABLE BOOKING (
 INSERT INTO BOOKING (flightID, userEmail, insurance, price)
 VALUES
 (1, 'johndoe@gmail.com', 1, '500.00'),
+(1, 'bingbong@gmail.com', 1, '350.00'),
+(1, 'willsmith@gmail.com', 1, '800.00'),
+(1, 'lebronjames@gmail.com', 1, '1000.00'),
+(1, 'tombrady@gmail.com', 1, '355.00'),
 (1, 'cb123@gmail.com', 0, '200.00');
+
 
 DROP TABLE IF EXISTS PAYMENT;
 CREATE TABLE PAYMENT (
@@ -199,15 +227,21 @@ CREATE TABLE BOOKED_SEATS (
 INSERT INTO BOOKED_SEATS (bookingID, seatNo, flightID)
 VALUES
 (1, '1A', 1),
-(1, '2B', 1),
-(1, '3C', 1),
-(2, '1B', 1),
-(2, '1C', 1);
+(1, '1B', 1),
+(1, '1C', 1),
+(2, '11B', 1),
+(2, '11C', 1),
+(3, '2A', 1),
+(3, '2B', 1),
+(4, '8D', 1),
+(4, '8E', 1),
+(4, '8F', 1),
+(5, '15A', 1),
+(5, '15B', 1),
+(6, '19C', 1),
+(6, '19D', 1),
+(6, '19E', 1);
 
-
-UPDATE SEATS
-SET availability = 1
-where flightID = 1 and seatNo = '1A';
-
-select * from SEATS 
-where flightID = 1 and seatNo = '1A';
+UPDATE SEATS AS s
+JOIN BOOKED_SEATS AS b ON s.seatNo = b.seatNo AND s.flightID = b.flightID
+SET s.availability = 1;
