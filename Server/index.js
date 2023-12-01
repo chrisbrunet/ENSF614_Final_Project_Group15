@@ -24,6 +24,7 @@ con.connect(function (err) {
 
 //API endpoints:
 
+// ----------------------- START: SELECTING FLIGHT AND BOOKING TICKETS ------------------------
 // Get all flights
 app.get("/api/all_flights", (req, res) => {
   con.query("SELECT * FROM FLIGHT", (err, result) => {
@@ -189,27 +190,21 @@ app.put("/api/flight/update_seat_availability", (req, res) => {
   );
 });
 
-// Add new registered user
-app.post("/api/registered_user/new", (req, res) => {
-  let user = req.body;
-  var sql =
-    "INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password) VALUES (?,?,?,?,?,?);";
+// add seat to booking 
+app.post("/api/flight/add_seats_to_booking", (req, res) => {
+  let params = req.body;
+  var sql = "INSERT INTO BOOKED_SEATS (bookingID, seatNo, flightID) \
+            VALUES (?, ?, ?);";
   con.query(
     sql,
     [
       // TEST PARAMS
-      // 'testfromapi@gmail.com',
-      // 'Chris',
-      // 'Brunet',
-      // '123 Calg AB',
-      // '1996-11-06',
-      // 'password123'
-      user.email,
-      user.firstName,
-      user.lastName,
-      user.address,
-      user.birthdate,
-      user.password
+      // '1',
+      // '2C',
+      // '1'
+      params.bookingID,
+      params.seatNo,
+      params.flightID
     ],
     (err, result) => {
       if (err) {
@@ -222,8 +217,113 @@ app.post("/api/registered_user/new", (req, res) => {
   );
 });
 
+// add payment to booking 
+app.post("/api/flight/add_payment_to_booking", (req, res) => {
+  let params = req.body;
+  var sql = "INSERT INTO PAYMENT (bookingID, cardNo, status) \
+            VALUES (?, ?, ?);";
+  con.query(
+    sql,
+    [
+      // TEST PARAMS
+      // '2',
+      // '1234123412341234',
+      // '1'
+      params.bookingID,
+      params.cardNo,
+      params.status
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        res.status(200).json('Success');
+      } 
+    }
+  );
+});
+// ----------------------- END: SELECTING FLIGHT AND BOOKING TICKETS ------------------------
 
 
+
+// ----------------------- START: ADDING AND MANAGING REGISTERED USERS ------------------------
+// Add new registered user
+app.post("/api/registered_user/new_user", (req, res) => {
+  let params = req.body;
+  var sql = "INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password) \
+            VALUES (?,?,?,?,?,?);";
+  con.query(
+    sql,
+    [
+      // TEST PARAMS
+      // 'testfromapi@gmail.com',
+      // 'Chris',
+      // 'Brunet',
+      // '123 Calg AB',
+      // '1996-11-06',
+      // 'password123'
+      params.email,
+      params.firstName,
+      params.lastName,
+      params.address,
+      params.birthdate,
+      params.password
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        res.status(200).json('Success');
+      } 
+    }
+  );
+});
+
+// get registered user info by email and password: can also be used for login maybe?
+app.get("/api/registered_user/get_user", (req, res) => {
+  let params = req.body;
+  var sql = "SELECT * FROM REGISTERED_USER \
+            WHERE email = ? AND password = ?;";
+  con.query(
+    sql, 
+    [
+      // TEST PARAMS
+      'johndoe@gmail.com',
+      'pword123'
+      // params.email,
+      // params.password
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
+app.post("/api/registered_user/credit_card_signup", (req, res) => {
+  let params = req.body;
+  var sql = "INSERT INTO AIRLINE_CREDIT_CARD (userID) \
+            VALUES (?);";
+  con.query(
+    sql,
+    [
+      // TEST PARAMS
+     '2'
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        res.status(200).json('Success');
+      } 
+    }
+  );
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

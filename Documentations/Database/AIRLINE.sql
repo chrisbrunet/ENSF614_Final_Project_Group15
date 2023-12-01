@@ -123,7 +123,7 @@ DROP TABLE IF EXISTS AIRLINE_CREDIT_CARD;
 CREATE TABLE AIRLINE_CREDIT_CARD (
     cardNo int not null auto_increment,
     userID int not null,
-    primary key (cardNo),
+    primary key (cardNo, userID),
     foreign key (userID) references REGISTERED_USER(userID)
 );
 
@@ -200,3 +200,5 @@ VALUES
 (1, '1A', 1),
 (1, '2B', 1),
 (1, '3C', 1);
+
+select * from airline_credit_card
