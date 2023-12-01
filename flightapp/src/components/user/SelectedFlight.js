@@ -37,8 +37,10 @@ const SelectedFlight = () => {
     const { flightID } = useParams();
 
     const [flightInfo, setFlightInfo] = useState([]);
-
     const [seatData, setSeatData] = useState([]);
+    const [selectedSeatIds, setSelectedSeatIds] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [cancellationInsurance, setCancellationInsurance] = useState(false);
 
     const getFlightInfo = (flightID) => {
         axios.get(`http://localhost:3001/api/search_flights_by_id`, 
@@ -75,20 +77,14 @@ const SelectedFlight = () => {
        getSeatMap(flightID);
     }, [flightID]);
 
-    const [selectedSeatIds, setSelectedSeatIds] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [cancellationInsurance, setCancellationInsurance] = useState(false);
-
     const toggleSeat = (seatId) => {
-        if (!seatId.includes('aisle')) {
-            setSelectedSeatIds((prevSelectedSeatIds) => {
-                if (prevSelectedSeatIds.includes(seatId)) {
-                    return prevSelectedSeatIds.filter((id) => id !== seatId);
-                } else {
-                    return [...prevSelectedSeatIds, seatId];
-                }
-            });
-        }
+        setSelectedSeatIds((prevSelectedSeatIds) => {
+            if (prevSelectedSeatIds.includes(seatId)) {
+                return prevSelectedSeatIds.filter((id) => id !== seatId);
+            } else {
+                return [...prevSelectedSeatIds, seatId];
+            }
+        });
     };
 
     const updateSelectedSeatsList = () => {
@@ -97,8 +93,25 @@ const SelectedFlight = () => {
         ));
     };
 
+    const handleSeatClick = () => {
+        updateSelectedSeatsList();
+    };
+
     const calculateTotalPrice = () => {
-        let newTotalPrice = selectedSeatIds.length * 250;
+        let newTotalPrice = 0;
+
+        for(let i = 0; i < selectedSeatIds.length; i++){
+            const selectedSeat = seatData.find(seat => seat.seatNo === selectedSeatIds[i]);
+
+            if (selectedSeat) {
+                let seatPrice = selectedSeat.seatPrice;
+                console.log(seatPrice);
+        
+                newTotalPrice += seatPrice;
+            } else {
+                console.log("Seat not found in seatData.");
+            }
+        }
 
         if (cancellationInsurance) {
             newTotalPrice += 50;
@@ -111,6 +124,10 @@ const SelectedFlight = () => {
         setCancellationInsurance((prevCancellationInsurance) => !prevCancellationInsurance);
         calculateTotalPrice();
     };
+
+    useEffect(() => {
+        calculateTotalPrice();
+    }, [selectedSeatIds, cancellationInsurance]);
 
     const seatTableBody = [];
     let row = [];
@@ -157,7 +174,7 @@ const SelectedFlight = () => {
                     </div>
                     <div className="selected-seats">
                         <h3>Selected Seats</h3>
-                        <ul id="selectedSeatsList">{updateSelectedSeatsList()}</ul>
+                        <ul id="selectedSeatsList">{handleSeatClick()}</ul>
                         <div className="cancellation-insurance">
                             <input
                                 type="checkbox"
