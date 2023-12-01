@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -22,6 +23,24 @@ const Home = () => {
         navigate('/agentLogin');
     };
 
+    const [flightCritera, setFlightCritera] = useState ({
+        departCity: "",
+        arriveCity: "",
+        flightDate: ""
+    });
+
+    const searchFlights = () => {
+        axios.get("http://localhost:3001/api/search_flights_by_criteria", {
+            params: flightCritera
+        })
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching flights:", error);
+        });
+    };
+
     return (
         <div>
             <div className="navbar">
@@ -36,18 +55,44 @@ const Home = () => {
                 <h2>Search Flights</h2>
                 <form>
                     <div className="input-group">
-                        <label htmlFor="departureAirport">Departure Airport:</label>
-                        <input type="text" id="departureAirport" name="departureAirport" required />
+                        <label htmlFor="departCity">Departure City:</label>
+                        <input 
+                            type="text" 
+                            id="departCity" 
+                            name="departCity" 
+                            value={flightCritera.departCity}
+                            onChange={(e) => setFlightCritera({ ...flightCritera, departCity: e.target.value })}
+                            required />
                     </div>
                     <div className="input-group">
-                        <label htmlFor="arrivalAirport">Arrival Airport:</label>
-                        <input type="text" id="arrivalAirport" name="arrivalAirport" required />
+                        <label htmlFor="arriveCity">Arrival City:</label>
+                        <input 
+                            type="text" 
+                            id="arriveCity" 
+                            name="arriveCity" 
+                            value={flightCritera.arriveCity}
+                            onChange={(e) => setFlightCritera({ ...flightCritera, arriveCity: e.target.value })}
+                            required />
                     </div>
                     <div className="input-group">
-                        <label htmlFor="date">Date:</label>
-                        <input type="date" id="date" name="date" required />
+                        <label htmlFor="flightDate">Date:</label>
+                        <input 
+                            type="date" 
+                            id="flightDate" 
+                            name="flightDate" 
+                            value={flightCritera.flightDate}
+                            onChange={(e) => setFlightCritera({ ...flightCritera, flightDate: e.target.value })}
+                            required
+                        />
                     </div>
-                    <button type="submit" className="btn">Search Flights</button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault(); // Prevent form submission
+                            searchFlights();
+                        }}
+                        type="button" // Set the button type to "button" to prevent form submission
+                        className="btn"
+                    >Search Flights</button>
                 </form>
             </div>
 

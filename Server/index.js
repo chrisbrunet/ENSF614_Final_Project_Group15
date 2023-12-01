@@ -38,7 +38,8 @@ app.get("/api/all_flights", (req, res) => {
 
 // Get flights by search criteria
 app.get("/api/search_flights_by_criteria", (req, res) => {
-  let params = req.body;
+  let params = req.query;
+
   var sql = "SELECT * FROM FLIGHT WHERE departCity = ? and arriveCity = ? and flightDate = ?;"
   con.query(
     sql, 
@@ -350,6 +351,7 @@ app.put("/api/booking/cancel_booking", (req, res) => {
 // Add new registered user
 app.post("/api/registered_user/new_user", (req, res) => {
   let params = req.body;
+  console.log('test user login');
   var sql = "INSERT INTO REGISTERED_USER (email, firstName, lastName, address, birthdate, password) \
             VALUES (?,?,?,?,?,?);";
   con.query(
@@ -382,7 +384,7 @@ app.post("/api/registered_user/new_user", (req, res) => {
 
 // get registered user info by email and password: can also be used for login maybe?
 app.get("/api/registered_user/get_user", (req, res) => {
-  let params = req.body;
+  let params = req.query;  
   var sql = "SELECT * FROM REGISTERED_USER \
             WHERE email = ? AND password = ?;";
   con.query(
