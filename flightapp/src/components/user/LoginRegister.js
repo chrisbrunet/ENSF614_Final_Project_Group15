@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 const LoginRegisterPage = () => {
     const navigate = useNavigate();
     const handleHomeButton = () => {
@@ -28,11 +30,31 @@ const LoginRegisterPage = () => {
         regPassword: ''
     });
 
-
+    const [loginDetails, setLoginDetails] = useState({
+        email: "",
+        password: ""
+    });
 
     const handleRegister = (e) => {
         e.preventDefault();
         alert('You Have Successfully Registered as a Member!');
+    };
+
+    const login = () => {
+        axios.get("http://localhost:3001/api/registered_user/get_user", {
+          params: loginDetails
+        })
+        .then((response) => {
+            console.log(response.data);
+            if (response.data.length === 1) {
+                handleLoginButton();
+            } else {
+                console.log("Incorrect email or password");
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching flights:", error);
+        });
     };
 
     return (
@@ -50,14 +72,33 @@ const LoginRegisterPage = () => {
                 <h2>Login</h2>
                 <form onSubmit={handleLoginButton}>
                     <div className="input-group">
-                        <label htmlFor="username">Username or Email:</label>
-                        <input type="text" id="username" name="username" required />
+                        <label htmlFor="emailLogin">Username or Email:</label>
+                        <input  
+                            type="text" 
+                            id="emailLogin"  
+                            value={loginDetails.email}
+                            onChange={(e) => setLoginDetails({ ...loginDetails, email: e.target.value })} 
+                            required  
+                        />
                     </div>
                     <div className="input-group">
-                        <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" name="password" required />
+                        <label htmlFor="passwordLogin">Password:</label>
+                        <input 
+                            type="password" 
+                            id="passwordLogin"  
+                            value={loginDetails.password}
+                            onChange={(e) => setLoginDetails({ ...loginDetails, password: e.target.value })} 
+                            required 
+                        />
                     </div>
-                    <button type="submit" className="btn">Login</button>
+                    <button 
+                        onClick={(e) => {
+                            e.preventDefault(); 
+                            login();
+                        }}
+                        type="button"
+                        className="btn"
+                    >Login</button>
                 </form>
             </div>
 
