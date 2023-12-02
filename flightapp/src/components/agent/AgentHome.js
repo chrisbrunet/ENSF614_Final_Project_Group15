@@ -1,6 +1,7 @@
-import React from 'react';
-import '../css/styles.css';
+import React, { useState } from 'react';
+import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AgentHome = () => {
 
@@ -8,6 +9,25 @@ const AgentHome = () => {
 
     const handleHomeButton = () => {
         navigate('/Home');
+    };
+
+    const [flightCritera, setFlightCritera] = useState ({
+        flightID: ""
+    });
+
+    const [searchResults, setSearchResults] = useState([]);
+
+    const searchFlights = () => {
+        axios.get("http://localhost:3001/api/airline_agent/get_passenger_list", {
+            params: flightCritera
+        })
+        .then((response) => {
+            console.log(response.data);
+            setSearchResults(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching flights:", error);
+        });
     };
 
     return (
@@ -22,11 +42,22 @@ const AgentHome = () => {
                 <form>
                     <h2>Flight Number</h2>
                     <div className="input-group">
-                        <input type="text" id="bookingID" name="bookingID" required />
+                        <input type="text" 
+                            id="flightID" 
+                            name="flightID" 
+                            value={flightCritera.flightID}
+                            onChange={(e) => setFlightCritera({ ...flightCritera, flightID: e.target.value })}
+                            required 
+                        />
                     </div>
-                    <button type="submit" className="btn">
-                        Search
-                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault(); 
+                            searchFlights();
+                        }}
+                        type="button" 
+                        className="btn"
+                    >Search Flights</button>
                 </form>
             </div>
             <div className="card" id="loginForm">
@@ -34,32 +65,19 @@ const AgentHome = () => {
                 <table className="flight-table">
                     <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>BookingID</th>
                         <th>Seat</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>1A</td>
-                    </tr>
-                    <tr>
-                        <td>John</td>
-                        <td>Boe</td>
-                        <td>3C</td>
-                    </tr>
-                    <tr>
-                        <td>John</td>
-                        <td>Schmoe</td>
-                        <td>23E</td>
-                    </tr>
-                    <tr>
-                        <td>John</td>
-                        <td>Hoe</td>
-                        <td>12A</td>
-                    </tr>
+                        {searchResults.map((flight) => (
+                            <tr key={flight.seatNo}>
+                                <td>{flight.userEmail}</td>
+                                <td>{flight.bookingID}</td>
+                                <td>{flight.seatNo}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

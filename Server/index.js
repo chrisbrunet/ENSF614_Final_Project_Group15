@@ -590,6 +590,28 @@ app.get("/api/airline_agent/get_user", (req, res) => {
   });
 });
 
+// get passenger list from a selected flight
+app.get("/api/airline_agent/get_passenger_list", (req, res) => {
+  let params = req.query;  
+  var sql = "SELECT b.userEmail, bs.bookingID, bs.seatNo \
+            FROM BOOKED_SEATS AS bs \
+            JOIN BOOKING AS b \
+            ON bs.bookingID = b.bookingID \
+            WHERE bs.flightID = ?;";
+  con.query(
+    sql, 
+    [
+      params.flightID,
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
