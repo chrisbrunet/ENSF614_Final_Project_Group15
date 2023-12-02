@@ -1,9 +1,99 @@
 import React, { useState } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AdminHome = () => {
     const navigate = useNavigate();
+
+    const [planeCrewID, setPlaneCrewID] = useState("");
+    const [planeAircraftType, setPlaneAircraftType] = useState("");
+    const [planeNumBusinessRows, setPlaneNumBusinessRows] = useState(5);
+    const [planeNumComfortRows, setPlaneNumComfortRows] = useState(5);
+    const [planeNumEconomyRows, setPlaneNumEconomyRows] = useState(10);
+    const handlePlaneAdd  = (e) => {
+        e.preventDefault()
+        axios.post('http://localhost:3001/api/aircraft', {
+            crewID: planeCrewID,
+            aircraftType: planeAircraftType,
+            numBusinessRows: planeNumBusinessRows,
+            numComfortRows: planeNumComfortRows,
+            numEconomyRows: planeNumEconomyRows,
+        }).then((response) => {
+            console.log(response);
+            if (response.data.success) {
+                alert("added aircraft")
+            } else {
+                alert(response.data);
+            }
+        })
+            .catch((error) => {
+                console.error("Error during registration:", error);
+                alert("Registration failed. See console for details.");
+            });
+    };
+
+    const [crewCrewID, setCrewCrewID] = useState("");
+    const handleCrewAdd  = (e) => {
+        e.preventDefault()
+        axios.post('http://localhost:3001/api/crew/new_member', {
+            crewID: crewCrewID,
+        }).then((response) => {
+            console.log(response);
+            if (response.data.success) {
+                alert("added crew")
+            } else {
+                alert(response.data);
+            }
+        })
+            .catch((error) => {
+                console.error("Error during registration:", error);
+                alert("Registration failed. See console for details.");
+            });
+    };
+
+    const printUsers = () => {
+        axios.get("http://localhost:3001/api/print_registered_user", {
+        })
+            .then((response) => {
+                console.log(response.data.registeredUsers);
+            })
+            .catch((error) => {
+                console.error("Error fetching registered users:", error);
+            });
+    };
+
+    const [deleteFlight, setDeleteFlight] = useState(0);
+    const removeFlight = (aircraftID) => {
+        axios.delete(`http://localhost:3001/api/flight/remove/${aircraftID}`)
+            .then((response) => {
+                console.log(response.data);
+                alert("removed aircraft")
+                // Handle the success message as needed
+            })
+            .catch((error) => {
+                console.error("Error removing flight:", error);
+                alert("Error removing aircraft")
+                // Handle the error as needed
+            });
+    };
+
+    const [deleteCrew, setDeleteCrew] = useState("");
+    const removeCrewMember = (crewID) => {
+        console.log('Removing crew member with ID:', crewID);
+        axios.delete(`http://localhost:3001/api/crew/remove/${crewID}`)
+            .then((response) => {
+                console.log('Response:', response.data);
+                alert("removed crew")
+                // Handle success message
+            })
+            .catch((error) => {
+                console.error("Error removing crew member:", error);
+                alert("crew cannot be removed as it is either incorrectly written or references an Aircraft.")
+                // Handle the error, e.g., show an error message to the user
+            });
+    };
+
     const handleHomeButton = () => {
         navigate('/Home');
     };
@@ -30,14 +120,31 @@ const AdminHome = () => {
                         <h2>Add Plane</h2>
                         <form>
                             <div className="input-group">
-                                <label htmlFor="aircraftID">ID:</label>
-                                <input type="text" id="aircraftID" name="aircraftID" required />
+                                <label htmlFor="crewID">crewID:</label>
+                                <input type="text" id="crewID" name="crewID" value={planeCrewID}
+                                       onChange={(e) => setPlaneCrewID(e.target.value)}  required />
                             </div>
                             <div className="input-group">
-                                <label htmlFor="type">Type:</label>
-                                <input type="text" id="type" name="type" required />
+                                <label htmlFor="aircraftType">aircraftType:</label>
+                                <input type="text" id="aircraftType" name="aircraftType" value={planeAircraftType}
+                                       onChange={(e) => setPlaneAircraftType(e.target.value)} required />
                             </div>
-                            <button onClick={changeAlert} className="btn">
+                            <div className="input-group">
+                                <label htmlFor="numBusinessRows">numBusinessRows:</label>
+                                <input type="text" id="numBusinessRows" name="numBusinessRows" value={planeNumBusinessRows}
+                                       onChange={(e) => setPlaneNumBusinessRows(Number(e.target.value))} required />
+                            </div>
+                            <div className="input-group">
+                                <label htmlFor="numComfortRows">numComfortRows:</label>
+                                <input type="text" id="numComfortRows" name="numComfortRows" value={planeNumComfortRows}
+                                       onChange={(e) => setPlaneNumComfortRows(Number(e.target.value))} required />
+                            </div>
+                            <div className="input-group">
+                                <label htmlFor="numEconomyRows">numEconomyRows:</label>
+                                <input type="text" id="numEconomyRows" name="numEconomyRows" value={planeNumEconomyRows}
+                                       onChange={(e) => setPlaneNumEconomyRows(Number(e.target.value))} required />
+                            </div>
+                            <button onClick={handlePlaneAdd} className="btn">
                                 Add
                             </button>
                         </form>
@@ -49,10 +156,11 @@ const AdminHome = () => {
                         <h2>Remove Plane</h2>
                         <form>
                             <div className="input-group">
-                                <label htmlFor="aircraftID">ID:</label>
-                                <input type="text" id="aircraftID" name="aircraftID" required />
+                                <label htmlFor="deleteFlight">Plane id to remove:</label>
+                                <input type="text" id="deleteFlight" name="deleteFlight" value={deleteFlight}
+                                       onChange={(e) => setDeleteFlight(Number(e.target.value))} required />
                             </div>
-                            <button onClick={changeAlert} className="btn">
+                            <button onClick={(e) => { e.preventDefault(); removeFlight(deleteFlight); }} className="btn">
                                 Remove
                             </button>
                         </form>
@@ -64,14 +172,11 @@ const AdminHome = () => {
                         <h2>Add Crew</h2>
                         <form>
                             <div className="input-group">
-                                <label htmlFor="crewID">ID:</label>
-                                <input type="text" id="crewID" name="crewID" required />
+                                <label htmlFor="crewCrewID">Crew ID:</label>
+                                <input type="text" id="crewCrewID" name="crewCrewID" value={crewCrewID}
+                                       onChange={(e) => setCrewCrewID(e.target.value)} required />
                             </div>
-                            <div className="input-group">
-                                <label htmlFor="crewSize">Size:</label>
-                                <input type="text" id="crewSize" name="crewSize" required />
-                            </div>
-                            <button onClick={changeAlert} className="btn">
+                            <button onClick={handleCrewAdd} className="btn">
                                 Add
                             </button>
                         </form>
@@ -83,10 +188,17 @@ const AdminHome = () => {
                         <h2>Remove Crew</h2>
                         <form>
                             <div className="input-group">
-                                <label htmlFor="crewID">ID:</label>
-                                <input type="text" id="crewID" name="crewID" required />
+                                <label htmlFor="deleteCrew">Crew ID to remove:</label>
+                                <input
+                                    type="text"
+                                    id="deleteCrew"
+                                    name="deleteCrew"
+                                    value={deleteCrew}
+                                    onChange={(e) => setDeleteCrew(e.target.value)}
+                                    required
+                                />
                             </div>
-                            <button onClick={changeAlert} className="btn">
+                            <button onClick={(e) => { e.preventDefault(); removeCrewMember(deleteCrew); }} className="btn">
                                 Remove
                             </button>
                         </form>
@@ -239,7 +351,7 @@ const AdminHome = () => {
                 <button onClick={() => toggleForm('removeDest')} className="btn">
                     Remove Destination
                 </button>
-                <button onClick={registerdUsersAlert} className="btn">
+                <button onClick={printUsers} className="btn">
                     Print Registered User List
                 </button>
             </div>

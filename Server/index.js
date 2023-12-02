@@ -568,7 +568,88 @@ app.post("/api/registered_user/use_companion_ticket", (req, res) => {
   );
 });
 // ----------------------- END: ADDING AND MANAGING REGISTERED USERS ------------------------
-
+app.post("/api/aircraft", (req, res) => {
+  let data = req.body;
+  var sql = "INSERT INTO AIRCRAFT (crewID, aircraftType, numBusinessRows, numComfortRows, numEconomyRows) \
+             VALUES (?, ?, ?, ?, ?);";
+  con.query(
+      sql,
+      [
+        data.crewID,
+        data.aircraftType,
+        data.numBusinessRows,
+        data.numComfortRows,
+        data.numEconomyRows
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Database error:", err);
+          res.status(500).json({ success: false, error: "Internal server error" });
+        } else {
+          res.json({ success: true, result });
+        }
+      }
+  );
+});
+app.post("/api/crew/new_member", (req, res) => {
+  let data = req.body;
+  var sql = "INSERT INTO CREW (crewID) VALUES (?);";
+  con.query(sql, [data.crewID], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    } else {
+      res.json({ success: true, result });
+    }
+  });
+});
+app.get("/api/print_registered_user", (req, res) => {
+  var sql = "SELECT * FROM REGISTERED_USER;";
+  con.query(sql, (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    } else {
+      res.json({ success: true, registeredUsers: result });
+    }
+  });
+});
+app.delete("/api/flight/remove/:aircraftID", (req, res) => {
+  const flightID = req.params.aircraftID;
+  var sql = "DELETE FROM AIRCRAFT WHERE aircraftID = ?;";
+  con.query(sql, [flightID], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    } else {
+      res.json({ success: true, message: "Flight removed successfully" });
+    }
+  });
+});
+app.delete('/api/crew/remove/:crewID', (req, res) => {
+  const crewID = req.params.crewID;
+  const checkAircraftSql = 'SELECT * FROM AIRCRAFT WHERE crewID = ?';
+  con.query(checkAircraftSql, [crewID], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+      return;
+    }
+    if (result.length > 0) {
+      res.status(400).json({ success: false, error: 'Crew member is still referenced in the aircraft table' });
+    } else {
+      const deleteCrewSql = 'DELETE FROM CREW WHERE crewID = ?';
+      con.query(deleteCrewSql, [crewID], (err, result) => {
+        if (err) {
+          console.error('Database error:', err);
+          res.status(500).json({ success: false, error: 'Internal server error' });
+        } else {
+          res.json({ success: true, message: 'Crew member removed successfully' });
+        }
+      });
+    }
+  });
+});
 
 // ----------------------- START: AIRLINE AGENT ACTIONS ------------------------
 // airline agent login

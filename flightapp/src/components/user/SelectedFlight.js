@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../css/styles.css';
 import styled from 'styled-components';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -63,11 +64,13 @@ const SelectedFlight = () => {
     //         console.error("Error creating booking:", error);
     //     }
     // };    
+    const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
     const handleConfirmPayButton = async () => {
         alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
         try {
             await createBooking();
+            setPaymentConfirmed(true)
             await updateSeatAvailability();
             navigate('/Home');
         } catch (error) {
@@ -243,6 +246,35 @@ const SelectedFlight = () => {
     }
     });
 
+    function formatCreditCardNumber(e) {
+        const input = e.target;
+        const value = input.value.replace(/\s/g, ''); // Remove existing spaces
+        const formattedValue = value.replace(/(\d{4})/g, '$1 ').trim();
+        input.value = formattedValue;
+    }
+
+    const handleSendReceiptButton = () => {
+        const templateParams = {
+            to_email: userDetails.email,
+            subject: 'Flight Receipt',
+            message: `Thank you for your payment. Total Price: $${totalPrice}. Selected Seats: ${selectedSeatIds.join(', ')}.`,
+        };
+
+        emailjs.send(
+            'service_tv1w3i4',
+            'template_6xww3jg',
+            templateParams,
+            'tycYXJZe_DlMa25fW'
+        )
+            .then((response) => {
+                console.log('Email sent successfully:', response);
+            })
+            .catch((error) => {
+                console.error('Error sending email:', error);
+            });
+    };
+
+
     return (
         <div>
             <div className="navbar">
@@ -283,15 +315,19 @@ const SelectedFlight = () => {
                             </div>
                             <div class="input-group">
                                 <label for="cardNo">Credit Card Number:</label>
-                                <input type="text" id="cardNO" name="cardNO" required />
+                                <input type="text" id="cardNO" name="cardNO" pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+                                       title="Please enter a valid credit card number"
+                                       required
+                                       onChange={(e) => formatCreditCardNumber(e)}required />
                             </div>
                             <div class="input-group">
                                 <label for="arrivalAirport">Expiry Date:</label>
-                                <input type="text" id="expDate" name="expDate" required />
+                                <input type="text" id="expDate" name="expDate" placeholder="MM/YY"
+                                       pattern="(0[1-9]|1[0-2])\/\d{2}" required />
                             </div>
                             <div class="input-group">
                                 <label for="date">CVC</label>
-                                <input type="text" id="cvc" name="cvc" required />
+                                <input type="text" id="cvc" name="cvc" pattern="\d{3}" inputMode="numeric" required />
                             </div>
                             <div class="input-group">
                                 <label for="date">Email:</label>
@@ -303,8 +339,13 @@ const SelectedFlight = () => {
                                     required 
                                 />
                             </div>
-                            <button onClick={() => handleConfirmPayButton()} className="btn">Confirm and Pay</button>
                         </form>
+                        <button onClick={() => handleConfirmPayButton()} className="btn">Confirm and Pay</button>
+                        <div style={{ height: '20px' }}></div>
+                        {paymentConfirmed && (
+                            <button onClick={() => handleSendReceiptButton()} className="btn">
+                                Send Receipt to Email
+                            </button>)}
                     </div>
                 </div>
             </div>

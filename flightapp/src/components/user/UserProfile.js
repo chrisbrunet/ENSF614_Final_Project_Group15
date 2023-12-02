@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import AppContext from '../../context/AppContext';
 
 const UserProfile = () => {
     const navigate = useNavigate();
+    const { user } = useContext(AppContext);
+
     const handleHomeButton = () => {
         navigate('/Home');
     };
     const showCCAlert = () => {
+        console.log(user)
         alert("You Have Successfully Applied for the Credit Card!");
     };
 
@@ -29,9 +33,9 @@ const UserProfile = () => {
                 <div className="flex-container">
                     <div className="user-details">
                         <h2>User Details</h2>
-                        <h3>First Name: John</h3>
-                        <h3>Last Name: Doe</h3>
-                        <h3>Email: john@gmail.com</h3>
+                        <h3>First Name: {user.fname}</h3>
+                        <h3>Last Name: {user.lname}</h3>
+                        <h3>Email: {user.userId}</h3>
                     </div>
                     <div className="options">
                         <h2>Options</h2>

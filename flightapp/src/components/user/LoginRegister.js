@@ -1,10 +1,11 @@
-import React, { useState, useEffect   } from 'react';
+import React, { useState, useEffect, useContext   } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import AppContext from '../../context/AppContext';
 const LoginRegisterPage = () => {
     const navigate = useNavigate();
+    const { user, setUser } = useContext(AppContext);
     const handleHomeButton = () => {
         navigate('/Home');
     };
@@ -43,6 +44,13 @@ const LoginRegisterPage = () => {
         .then((response) => {
             console.log(response.data);
             if (response.data.length === 1) {
+                console.log(response)
+                setUser({
+                    ...user,
+                    userId: response.data[0].email,
+                    fname: response.data[0].firstName,
+                    lname: response.data[0].lastName
+                });
                 handleLoginButton();
             } else {
                 alert("Incorrect email or password");
