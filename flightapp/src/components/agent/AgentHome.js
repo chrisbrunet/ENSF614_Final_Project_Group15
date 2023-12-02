@@ -42,7 +42,8 @@ const AgentHome = () => {
                 <form>
                     <h2>Flight Number</h2>
                     <div className="input-group">
-                        <input type="text" 
+                        <input 
+                            type="text" 
                             id="flightID" 
                             name="flightID" 
                             value={flightCritera.flightID}

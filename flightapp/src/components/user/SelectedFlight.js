@@ -30,9 +30,15 @@ const StyledTableCell = styled.td`
 const SelectedFlight = () => {
 
     const navigate = useNavigate();
+
     const handleHomeButton = () => {
         navigate('/Home');
     };
+
+    const handleConfirmPayButton = () => {
+        createBooking();
+    };
+
 
     const { flightID } = useParams();
 
@@ -41,6 +47,7 @@ const SelectedFlight = () => {
     const [selectedSeatIds, setSelectedSeatIds] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [cancellationInsurance, setCancellationInsurance] = useState(false);
+    const [userEmail, setUserEmail] = useState([])
 
     const getFlightInfo = (flightID) => {
         axios.get(`http://localhost:3001/api/search_flights_by_id`, 
@@ -61,6 +68,32 @@ const SelectedFlight = () => {
         axios.get(`http://localhost:3001/api/flight/seatmap`, 
         {params: {
             flightID: flightID
+          }
+        })
+        .then((response) => {
+            console.log(response.data);
+            setSeatData(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching seat details:", error);
+        });
+    };
+
+    // got a start on this but had to leave
+    const createBooking = () => {
+        var insuranceNum;
+        if(cancellationInsurance === false){
+            insuranceNum = 0;
+        } else {
+            insuranceNum = 1;
+        }
+
+        axios.post(`http://localhost:3001/api/flight/new_booking`, 
+        {params: {
+            flightID: flightID,
+            userEmail: userEmail.email,
+            insurance: insuranceNum,
+            price: totalPrice
           }
         })
         .then((response) => {
@@ -207,9 +240,15 @@ const SelectedFlight = () => {
                             </div>
                             <div class="input-group">
                                 <label for="date">Email:</label>
-                                <input type="text" id="email" name="email" required />
+                                <input type="text" 
+                                    id="email" 
+                                    name="email" 
+                                    value={userEmail.email}
+                                    onChange={(e) => setUserEmail({ ...userEmail, email: e.target.value })}
+                                    required 
+                                />
                             </div>
-                            <button class="submit">Confirm and Pay</button>
+                            <button onClick={() => handleConfirmPayButton()} className="btn">Confirm and Pay</button>
                         </form>
                     </div>
                 </div>

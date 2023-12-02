@@ -162,7 +162,8 @@ app.get("/api/flight/seatmap", (req, res) => {
 
 // create new booking
 app.post("/api/flight/new_booking", (req, res) => {
-  let params = req.body;
+  let params = req.query;
+  console.log(params);
   var sql =
     "INSERT INTO BOOKING (flightID, userEmail, insurance, price) \
     VALUES (?, ?, ?, ?);";
@@ -611,6 +612,8 @@ app.get("/api/airline_agent/get_passenger_list", (req, res) => {
     }
   });
 });
+// ----------------------- END: AIRLINE AGENT ACTIONS ------------------------
+
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
