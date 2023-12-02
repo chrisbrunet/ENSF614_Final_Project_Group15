@@ -142,7 +142,8 @@ app.get("/api/flight/seatmap", (req, res) => {
             ON f.flightID = s.flightID \
             JOIN SEAT_TYPE_PRICES AS p \
             ON s.seatType = p.seatType \
-            WHERE f.flightID = ?;"
+            WHERE f.flightID = ? \
+            ORDER BY s.rowNumber;"
   con.query(
     sql, 
     [

@@ -26,12 +26,12 @@ CREATE TABLE AIRCRAFT (
 
 INSERT INTO AIRCRAFT (crewID, aircraftType, numBusinessRows, numComfortRows, numEconomyRows)
 VALUES
-('A', '737', 6, 10, 20), 
-('B', '737', 6, 10, 20), 
-('C', '787', 10, 10, 20), 
-('D', '787', 10, 10, 20), 
-('E', '747', 20, 20, 40), 
-('F', '747', 20, 20, 40);
+('A', '737', 5, 5, 10), 
+('B', '737', 5, 5, 10), 
+('C', '787', 5, 5, 10), 
+('D', '787', 5, 5, 10), 
+('E', '747', 5, 5, 10), 
+('F', '747', 5, 5, 10);
 
 DROP TABLE IF EXISTS FLIGHT;
 CREATE TABLE FLIGHT (
@@ -75,52 +75,40 @@ VALUES
 
 DROP TABLE IF EXISTS SEATS;
 CREATE TABLE SEATS (
-    seatNo varchar(20) not null,
-	flightID int not null,
-    availability int default(0),
-    seatType varchar(20) not null,
-	primary key (seatNo, flightID), 
-    foreign key (flightID) references FLIGHT(flightID),
-    foreign key (seatType) references SEAT_TYPE_PRICES(seatType)
+    seatNo VARCHAR(20) NOT NULL,
+    flightID INT NOT NULL,
+    availability INT DEFAULT(0),
+    seatType VARCHAR(20) NOT NULL,
+    rowNumber INT NOT NULL,
+    columnChar CHAR(1) NOT NULL,
+    PRIMARY KEY (seatNo, flightID), 
+    FOREIGN KEY (flightID) REFERENCES FLIGHT(flightID),
+    FOREIGN KEY (seatType) REFERENCES SEAT_TYPE_PRICES(seatType)
 );
 
-INSERT INTO SEATS(seatNo, flightID, seatType)
+INSERT INTO SEATS(seatNo, flightID, seatType, rowNumber, columnChar)
 VALUES
-('1A', 1, 'Business'), ('1B', 1, 'Business'), ('1C', 1, 'Business'), ('1D', 1, 'Business'), ('1E', 1, 'Business'), ('1F', 1, 'Business'), 
-('2A', 1, 'Business'), ('2B', 1, 'Business'), ('2C', 1, 'Business'), ('2D', 1, 'Business'), ('2E', 1, 'Business'), ('2F', 1, 'Business'), 
-('3A', 1, 'Business'), ('3B', 1, 'Business'), ('3C', 1, 'Business'), ('3D', 1, 'Business'), ('3E', 1, 'Business'), ('3F', 1, 'Business'),
-('4A', 1, 'Business'), ('4B', 1, 'Business'), ('4C', 1, 'Business'), ('4D', 1, 'Business'), ('4E', 1, 'Business'), ('4F', 1, 'Business'), 
-('5A', 1, 'Business'), ('5B', 1, 'Business'), ('5C', 1, 'Business'), ('5D', 1, 'Business'), ('5E', 1, 'Business'), ('5F', 1, 'Business'), 
-('6A', 1, 'Comfort'), ('6B', 1, 'Comfort'), ('6C', 1, 'Comfort'), ('6D', 1, 'Comfort'), ('6E', 1, 'Comfort'), ('6F', 1, 'Comfort'), 
-('7A', 1, 'Comfort'), ('7B', 1, 'Comfort'), ('7C', 1, 'Comfort'), ('7D', 1, 'Comfort'), ('7E', 1, 'Comfort'), ('7F', 1, 'Comfort'), 
-('8A', 1, 'Comfort'), ('8B', 1, 'Comfort'), ('8C', 1, 'Comfort'), ('8D', 1, 'Comfort'), ('8E', 1, 'Comfort'), ('8F', 1, 'Comfort'), 
-('9A', 1, 'Comfort'), ('9B', 1, 'Comfort'), ('9C', 1, 'Comfort'), ('9D', 1, 'Comfort'), ('9E', 1, 'Comfort'), ('9F', 1, 'Comfort'), 
-('10A', 1, 'Comfort'), ('10B', 1, 'Comfort'), ('10C', 1, 'Comfort'), ('10D', 1, 'Comfort'), ('10E', 1, 'Comfort'), ('10F', 1, 'Comfort'),
-('11A', 1, 'Ordinary'), ('11B', 1, 'Ordinary'), ('11C', 1, 'Ordinary'), ('11D', 1, 'Ordinary'), ('11E', 1, 'Ordinary'), ('11F', 1, 'Ordinary'), 
-('12A', 1, 'Ordinary'), ('12B', 1, 'Ordinary'), ('12C', 1, 'Ordinary'), ('12D', 1, 'Ordinary'), ('12E', 1, 'Ordinary'), ('12F', 1, 'Ordinary'), 
-('13A', 1, 'Ordinary'), ('13B', 1, 'Ordinary'), ('13C', 1, 'Ordinary'), ('13D', 1, 'Ordinary'), ('13E', 1, 'Ordinary'), ('13F', 1, 'Ordinary'), 
-('14A', 1, 'Ordinary'), ('14B', 1, 'Ordinary'), ('14C', 1, 'Ordinary'), ('14D', 1, 'Ordinary'), ('14E', 1, 'Ordinary'), ('14F', 1, 'Ordinary'), 
-('15A', 1, 'Ordinary'), ('15B', 1, 'Ordinary'), ('15C', 1, 'Ordinary'), ('15D', 1, 'Ordinary'), ('15E', 1, 'Ordinary'), ('15F', 1, 'Ordinary'), 
-('16A', 1, 'Ordinary'), ('16B', 1, 'Ordinary'), ('16C', 1, 'Ordinary'), ('16D', 1, 'Ordinary'), ('16E', 1, 'Ordinary'), ('16F', 1, 'Ordinary'), 
-('17A', 1, 'Ordinary'), ('17B', 1, 'Ordinary'), ('17C', 1, 'Ordinary'), ('17D', 1, 'Ordinary'), ('17E', 1, 'Ordinary'), ('17F', 1, 'Ordinary'), 
-('18A', 1, 'Ordinary'), ('18B', 1, 'Ordinary'), ('18C', 1, 'Ordinary'), ('18D', 1, 'Ordinary'), ('18E', 1, 'Ordinary'), ('18F', 1, 'Ordinary'), 
-('19A', 1, 'Ordinary'), ('19B', 1, 'Ordinary'), ('19C', 1, 'Ordinary'), ('19D', 1, 'Ordinary'), ('19E', 1, 'Ordinary'), ('19F', 1, 'Ordinary'), 
-('20A', 1, 'Ordinary'), ('20B', 1, 'Ordinary'), ('20C', 1, 'Ordinary'), ('20D', 1, 'Ordinary'), ('20E', 1, 'Ordinary'), ('20F', 1, 'Ordinary');
-
--- DROP TABLE IF EXISTS USER;
--- CREATE TABLE USER (
---     email varchar(50) not null,
---     primary key (email)
--- );
-
--- INSERT INTO USER (email)
--- VALUES
--- ('johndoe@gmail.com'),
--- ('cb123@gmail.com'),
--- ('billgates@icloud.com'),
--- ('tomcruise@gmail.com'),
--- ('example@gmail.com'),
--- ('coolguy@gmail.com');
+-- Business Seats (Rows 1-5)
+('1A', 1, 'Business', 1, 'A'), ('1B', 1, 'Business', 1, 'B'), ('1C', 1, 'Business', 1, 'C'), ('1D', 1, 'Business', 1, 'D'), ('1E', 1, 'Business', 1, 'E'), ('1F', 1, 'Business', 1, 'F'),
+('2A', 1, 'Business', 2, 'A'), ('2B', 1, 'Business', 2, 'B'), ('2C', 1, 'Business', 2, 'C'), ('2D', 1, 'Business', 2, 'D'), ('2E', 1, 'Business', 2, 'E'), ('2F', 1, 'Business', 2, 'F'),
+('3A', 1, 'Business', 3, 'A'), ('3B', 1, 'Business', 3, 'B'), ('3C', 1, 'Business', 3, 'C'), ('3D', 1, 'Business', 3, 'D'), ('3E', 1, 'Business', 3, 'E'), ('3F', 1, 'Business', 3, 'F'),
+('4A', 1, 'Business', 4, 'A'), ('4B', 1, 'Business', 4, 'B'), ('4C', 1, 'Business', 4, 'C'), ('4D', 1, 'Business', 4, 'D'), ('4E', 1, 'Business', 4, 'E'), ('4F', 1, 'Business', 4, 'F'),
+('5A', 1, 'Business', 5, 'A'), ('5B', 1, 'Business', 5, 'B'), ('5C', 1, 'Business', 5, 'C'), ('5D', 1, 'Business', 5, 'D'), ('5E', 1, 'Business', 5, 'E'), ('5F', 1, 'Business', 5, 'F'),
+('6A', 1, 'Comfort', 6, 'A'), ('6B', 1, 'Comfort', 6, 'B'), ('6C', 1, 'Comfort', 6, 'C'), ('6D', 1, 'Comfort', 6, 'D'), ('6E', 1, 'Comfort', 6, 'E'), ('6F', 1, 'Comfort', 6, 'F'),
+('7A', 1, 'Comfort', 7, 'A'), ('7B', 1, 'Comfort', 7, 'B'), ('7C', 1, 'Comfort', 7, 'C'), ('7D', 1, 'Comfort', 7, 'D'), ('7E', 1, 'Comfort', 7, 'E'), ('7F', 1, 'Comfort', 7, 'F'),
+('8A', 1, 'Comfort', 8, 'A'), ('8B', 1, 'Comfort', 8, 'B'), ('8C', 1, 'Comfort', 8, 'C'), ('8D', 1, 'Comfort', 8, 'D'), ('8E', 1, 'Comfort', 8, 'E'), ('8F', 1, 'Comfort', 8, 'F'),
+('9A', 1, 'Comfort', 9, 'A'), ('9B', 1, 'Comfort', 9, 'B'), ('9C', 1, 'Comfort', 9, 'C'), ('9D', 1, 'Comfort', 9, 'D'), ('9E', 1, 'Comfort', 9, 'E'), ('9F', 1, 'Comfort', 9, 'F'),
+('10A', 1, 'Comfort', 10, 'A'), ('10B', 1, 'Comfort', 10, 'B'), ('10C', 1, 'Comfort', 10, 'C'), ('10D', 1, 'Comfort', 10, 'D'), ('10E', 1, 'Comfort', 10, 'E'), ('10F', 1, 'Comfort', 10, 'F'),
+('11A', 1, 'Ordinary', 11, 'A'), ('11B', 1, 'Ordinary', 11, 'B'), ('11C', 1, 'Ordinary', 11, 'C'), ('11D', 1, 'Ordinary', 11, 'D'), ('11E', 1, 'Ordinary', 11, 'E'), ('11F', 1, 'Ordinary', 11, 'F'),
+('12A', 1, 'Ordinary', 12, 'A'), ('12B', 1, 'Ordinary', 12, 'B'), ('12C', 1, 'Ordinary', 12, 'C'), ('12D', 1, 'Ordinary', 12, 'D'), ('12E', 1, 'Ordinary', 12, 'E'), ('12F', 1, 'Ordinary', 12, 'F'),
+('13A', 1, 'Ordinary', 13, 'A'), ('13B', 1, 'Ordinary', 13, 'B'), ('13C', 1, 'Ordinary', 13, 'C'), ('13D', 1, 'Ordinary', 13, 'D'), ('13E', 1, 'Ordinary', 13, 'E'), ('13F', 1, 'Ordinary', 13, 'F'),
+('14A', 1, 'Ordinary', 14, 'A'), ('14B', 1, 'Ordinary', 14, 'B'), ('14C', 1, 'Ordinary', 14, 'C'), ('14D', 1, 'Ordinary', 14, 'D'), ('14E', 1, 'Ordinary', 14, 'E'), ('14F', 1, 'Ordinary', 14, 'F'),
+('15A', 1, 'Ordinary', 15, 'A'), ('15B', 1, 'Ordinary', 15, 'B'), ('15C', 1, 'Ordinary', 15, 'C'), ('15D', 1, 'Ordinary', 15, 'D'), ('15E', 1, 'Ordinary', 15, 'E'), ('15F', 1, 'Ordinary', 15, 'F'),
+('16A', 1, 'Ordinary', 16, 'A'), ('16B', 1, 'Ordinary', 16, 'B'), ('16C', 1, 'Ordinary', 16, 'C'), ('16D', 1, 'Ordinary', 16, 'D'), ('16E', 1, 'Ordinary', 16, 'E'), ('16F', 1, 'Ordinary', 16, 'F'),
+('17A', 1, 'Ordinary', 17, 'A'), ('17B', 1, 'Ordinary', 17, 'B'), ('17C', 1, 'Ordinary', 17, 'C'), ('17D', 1, 'Ordinary', 17, 'D'), ('17E', 1, 'Ordinary', 17, 'E'), ('17F', 1, 'Ordinary', 17, 'F'),
+('18A', 1, 'Ordinary', 18, 'A'), ('18B', 1, 'Ordinary', 18, 'B'), ('18C', 1, 'Ordinary', 18, 'C'), ('18D', 1, 'Ordinary', 18, 'D'), ('18E', 1, 'Ordinary', 18, 'E'), ('18F', 1, 'Ordinary', 18, 'F'),
+('19A', 1, 'Ordinary', 19, 'A'), ('19B', 1, 'Ordinary', 19, 'B'), ('19C', 1, 'Ordinary', 19, 'C'), ('19D', 1, 'Ordinary', 19, 'D'), ('19E', 1, 'Ordinary', 19, 'E'), ('19F', 1, 'Ordinary', 19, 'F'),
+('20A', 1, 'Ordinary', 20, 'A'), ('20B', 1, 'Ordinary', 20, 'B'), ('20C', 1, 'Ordinary', 20, 'C'), ('20D', 1, 'Ordinary', 20, 'D'), ('20E', 1, 'Ordinary', 20, 'E'), ('20F', 1, 'Ordinary', 20, 'F');
 
 DROP TABLE IF EXISTS REGISTERED_USER;
 CREATE TABLE REGISTERED_USER (
@@ -197,6 +185,10 @@ VALUES
 (1, 'willsmith@gmail.com', 1, '800.00'),
 (1, 'lebronjames@gmail.com', 1, '1000.00'),
 (1, 'tombrady@gmail.com', 1, '355.00'),
+(1, 'mjordan@gmail.com', 1, '350.00'),
+(1, 'scrosby@gmail.com', 1, '800.00'),
+(1, 'cmcdavid@gmail.com', 1, '1000.00'),
+(1, 'billrussell@gmail.com', 1, '355.00'),
 (1, 'cb123@gmail.com', 0, '200.00');
 
 
@@ -240,7 +232,16 @@ VALUES
 (5, '15B', 1),
 (6, '19C', 1),
 (6, '19D', 1),
-(6, '19E', 1);
+(6, '19E', 1),
+(7, '5A', 1),
+(7, '5B', 1),
+(8, '5E', 1),
+(8, '5F', 1),
+(9, '13A', 1),
+(9, '13B', 1),
+(9, '13C', 1),
+(9, '13D', 1),
+(10, '13E', 1);
 
 UPDATE SEATS AS s
 JOIN BOOKED_SEATS AS b ON s.seatNo = b.seatNo AND s.flightID = b.flightID
