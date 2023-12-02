@@ -188,7 +188,7 @@ VALUES
 (1, 'mjordan@gmail.com', 1, '350.00'),
 (1, 'scrosby@gmail.com', 1, '800.00'),
 (1, 'cmcdavid@gmail.com', 1, '1000.00'),
-(1, 'billrussell@gmail.com', 1, '355.00'),
+(1, 'billrussell@gmail.com', 1, '500.00'),
 (1, 'cb123@gmail.com', 0, '200.00');
 
 

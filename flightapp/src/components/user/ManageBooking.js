@@ -17,8 +17,9 @@ const ManageBooking = () => {
 
     const handleCancelBooking = async (bookingID) => {
         alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`)
-        getBookedSeats(bookingID);
-        revertSeatAvailability();
+        await getBookedSeats(bookingID);
+        console.log(bookedSeats)
+        await revertSeatAvailability();
         await cancelBooking(bookingID);
         searchBookings();
     };
@@ -53,17 +54,17 @@ const ManageBooking = () => {
         axios.put(`http://localhost:3001/api/booking/cancel_booking?bookingID=${bookingID}`)
         .then((response) => {
             console.log("Cancel successful");
-            console.log(response);
+            console.log(response.data);
         })
         .catch((error) => {
             console.error("Error cancelling Booking:", error);
         });
     };
 
-    const getBookedSeats = (bookingID) => {
+    const getBookedSeats = async (bookingID) => {
         axios.get(`http://localhost:3001/api/booking/get_booked_seats?bookingID=${bookingID}`)
         .then((response) => {
-            console.log(response);
+            console.log(response.data);
             setBookedSeats(response.data);
         })
         .catch((error) => {
@@ -71,19 +72,19 @@ const ManageBooking = () => {
         });
     };
 
-    const revertSeatAvailability = () => {
-        console.log(bookedSeats);
-        bookedSeats.forEach((seat) => {
-            const { flightID, seatNo } = seat;
-            axios.put(`http://localhost:3001/api/booking/revert_seat_availability?seatNo=${seatNo}&flightID=${flightID}`)
-            .then((response) => {
+    const revertSeatAvailability = async () => {
+        try {
+            const revertPromises = bookedSeats.map(async (seat) => {
+                const { flightID, seatNo } = seat;
+                const response = await axios.put(`http://localhost:3001/api/booking/revert_seat_availability?seatNo=${seatNo}&flightID=${flightID}`);
                 console.log("Seat reverted");
-                console.log(response);
-            })
-            .catch((error) => {
-                console.error("Error reverting seats:", error);
+                console.log(response.data);
+                return response;
             });
-        });
+            await Promise.all(revertPromises);
+        } catch (error) {
+            console.error("Error reverting seats:", error);
+        }
     };
 
     return (
@@ -155,7 +156,7 @@ const ManageBooking = () => {
                                 <td>{booking.numSeats}</td>
                                 <td>{booking.price}</td>
                                 <td>
-                                    <button onClick={() => { handleCancelBooking(booking.bookingID) }} className="btn">Cancel Booking</button>
+                                <button onClick={() => handleCancelBooking(booking.bookingID)} className="btn">Remove Seats</button>
                                 </td>
                             </tr>
                         )
