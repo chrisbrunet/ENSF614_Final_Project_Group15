@@ -162,8 +162,7 @@ app.get("/api/flight/seatmap", (req, res) => {
 
 // create new booking
 app.post("/api/flight/new_booking", (req, res) => {
-  let params = req.query;
-  console.log(params);
+  let params = req.body;
   var sql =
     "INSERT INTO BOOKING (flightID, userEmail, insurance, price) \
     VALUES (?, ?, ?, ?);";
@@ -193,7 +192,8 @@ app.post("/api/flight/new_booking", (req, res) => {
 
 // update a seat availability
 app.put("/api/flight/update_seat_availability", (req, res) => {
-  let params = req.body;
+  let params = req.query;
+  console.log(params);
   var sql = "UPDATE FLIGHT AS f \
             JOIN SEATS AS s \
             ON f.flightID = s.flightID \
@@ -206,7 +206,7 @@ app.put("/api/flight/update_seat_availability", (req, res) => {
       // '1',
       // '2B'
       params.flightID,
-      params.seatNO
+      params.seatNo
     ],
     (err, result) => {
       if (err) {

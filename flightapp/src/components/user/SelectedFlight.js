@@ -35,8 +35,15 @@ const SelectedFlight = () => {
         navigate('/Home');
     };
 
-    const handleConfirmPayButton = () => {
-        createBooking();
+    const handleConfirmPayButton = async () => {
+        alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
+        try {
+            await createBooking();
+            await updateSeatAvailability();
+            navigate('/Home');
+        } catch (error) {
+            console.error("Error creating booking:", error);
+        }
     };
 
 
@@ -47,7 +54,7 @@ const SelectedFlight = () => {
     const [selectedSeatIds, setSelectedSeatIds] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [cancellationInsurance, setCancellationInsurance] = useState(false);
-    const [userEmail, setUserEmail] = useState([])
+    const [userDetails, setUserDetails] = useState([])
 
     const getFlightInfo = (flightID) => {
         axios.get(`http://localhost:3001/api/search_flights_by_id`, 
@@ -79,8 +86,7 @@ const SelectedFlight = () => {
         });
     };
 
-    // got a start on this but had to leave
-    const createBooking = () => {
+    const createBooking = async () => {
         var insuranceNum;
         if(cancellationInsurance === false){
             insuranceNum = 0;
@@ -88,21 +94,34 @@ const SelectedFlight = () => {
             insuranceNum = 1;
         }
 
-        axios.post(`http://localhost:3001/api/flight/new_booking`, 
-        {params: {
-            flightID: flightID,
-            userEmail: userEmail.email,
-            insurance: insuranceNum,
-            price: totalPrice
-          }
-        })
-        .then((response) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/api/flight/new_booking`, {
+                flightID: flightID,
+                userEmail: userDetails.email,
+                insurance: `${insuranceNum}`,
+                price: `${totalPrice}`
+            });
+            console.log("Booking successful");
             console.log(response.data);
-            setSeatData(response.data);
-        })
-        .catch((error) => {
-            console.error("Error fetching seat details:", error);
-        });
+        } catch (error) {
+            console.error("Error creating Booking:", error);
+            throw error;
+        }
+    };
+
+    const updateSeatAvailability = async () => {
+        try {
+            const revertPromises = selectedSeatIds.map(async (seatNo) => {
+                const response = await axios.put(`http://localhost:3001/api/flight/update_seat_availability?seatNo=${seatNo}&flightID=${flightID}`);
+                console.log("Seat updated");
+                console.log(response.data);
+                return response;
+            });
+            await Promise.all(revertPromises);
+        } catch (error) {
+            console.error("Error updating seats:", error);
+            throw error;
+        }
     };
 
     useEffect(() => {
@@ -243,8 +262,8 @@ const SelectedFlight = () => {
                                 <input type="text" 
                                     id="email" 
                                     name="email" 
-                                    value={userEmail.email}
-                                    onChange={(e) => setUserEmail({ ...userEmail, email: e.target.value })}
+                                    value={userDetails.email}
+                                    onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
                                     required 
                                 />
                             </div>
