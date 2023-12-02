@@ -29,11 +29,40 @@ const StyledTableCell = styled.td`
 
 const SelectedFlight = () => {
 
+    const { flightID } = useParams();
+
+    const [flightInfo, setFlightInfo] = useState([]);
+    const [seatData, setSeatData] = useState([]);
+    const [selectedSeatIds, setSelectedSeatIds] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [cancellationInsurance, setCancellationInsurance] = useState(false);
+    const [userDetails, setUserDetails] = useState([]);
+    const [lastInsertID, setLastInsertID] = useState([]);
+
     const navigate = useNavigate();
 
     const handleHomeButton = () => {
         navigate('/Home');
     };
+
+    // const handleConfirmPayButton = async () => {
+    //     alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
+    //     try {
+    //         const bookingResponse = await createBooking();
+    //         const bookingID = bookingResponse.data.insertId;
+    //         console.log(bookingID);
+    
+    //         await updateSeatAvailability();
+    //         if (bookingID) {
+    //             await addSeatsToBooking(bookingID);
+    //         } else {
+    //             console.error("Invalid lastInsertID");
+    //         }
+    //         navigate('/Home');
+    //     } catch (error) {
+    //         console.error("Error creating booking:", error);
+    //     }
+    // };    
 
     const handleConfirmPayButton = async () => {
         alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
@@ -44,17 +73,7 @@ const SelectedFlight = () => {
         } catch (error) {
             console.error("Error creating booking:", error);
         }
-    };
-
-
-    const { flightID } = useParams();
-
-    const [flightInfo, setFlightInfo] = useState([]);
-    const [seatData, setSeatData] = useState([]);
-    const [selectedSeatIds, setSelectedSeatIds] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [cancellationInsurance, setCancellationInsurance] = useState(false);
-    const [userDetails, setUserDetails] = useState([])
+    };    
 
     const getFlightInfo = (flightID) => {
         axios.get(`http://localhost:3001/api/search_flights_by_id`, 
@@ -102,7 +121,8 @@ const SelectedFlight = () => {
                 price: `${totalPrice}`
             });
             console.log("Booking successful");
-            console.log(response.data);
+            setLastInsertID(response.data.insertId);
+            console.log(response.data.insertId);
         } catch (error) {
             console.error("Error creating Booking:", error);
             throw error;
@@ -123,6 +143,22 @@ const SelectedFlight = () => {
             throw error;
         }
     };
+
+    // const addSeatsToBooking = async (bookingID, seatNo) => {
+    //     try {
+    //         const revertPromises = selectedSeatIds.map(async (seatNo) => {
+    //             const response = await axios.put(`http://localhost:3001/api/flight/add_seats_to_booking?bookingID=${bookingID}&seatNo=${seatNo}&flightID=${flightID}`);
+    //             console.log("Seat added to booking");
+    //             console.log(response.data);
+    //             return response;
+    //         });
+    //         await Promise.all(revertPromises);
+    //     } catch (error) {
+    //         console.error("Error updating booking:", error);
+    //         throw error;
+    //     }
+    // };
+    
 
     useEffect(() => {
        getFlightInfo(flightID);
