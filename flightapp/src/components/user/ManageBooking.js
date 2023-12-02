@@ -15,15 +15,6 @@ const ManageBooking = () => {
         alert("search")
     };
 
-    const handleCancelBooking = async (bookingID) => {
-        alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`)
-        await getBookedSeats(bookingID);
-        console.log(bookedSeats)
-        await revertSeatAvailability();
-        await cancelBooking(bookingID);
-        searchBookings();
-    };
-
     const formatDateString = (dateString) => {
         const date = new Date(dateString);
         return date.toISOString().substring(0, 10);
@@ -35,44 +26,33 @@ const ManageBooking = () => {
     });
 
     const [searchResults, setSearchResults] = useState([]);
-
-    const [bookedSeats, setBookedSeats] = useState([]);
-
-    const searchBookings = () => {
-        axios.get("http://localhost:3001/api/booking/get_booking", {
-            params: bookingCriteria
-        })
-        .then((response) => {
-            setSearchResults(response.data);
-        })
-        .catch((error) => {
-            console.error("Error fetching Bookings:", error);
-        });
+    
+    const handleCancelBooking = async (bookingID) => {
+        alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`);
+    
+        try {
+            const bookedSeats = await getBookedSeats(bookingID);
+            console.log(bookedSeats);
+            await revertSeatAvailability(bookedSeats);
+            await cancelBooking(bookingID);
+            searchBookings();
+        } catch (error) {
+            console.error("Error cancelling booking:", error);
+        }
     };
-
-    const cancelBooking = async (bookingID) => {
-        axios.put(`http://localhost:3001/api/booking/cancel_booking?bookingID=${bookingID}`)
-        .then((response) => {
-            console.log("Cancel successful");
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.error("Error cancelling Booking:", error);
-        });
-    };
-
+    
     const getBookedSeats = async (bookingID) => {
-        axios.get(`http://localhost:3001/api/booking/get_booked_seats?bookingID=${bookingID}`)
-        .then((response) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/booking/get_booked_seats?bookingID=${bookingID}`);
             console.log(response.data);
-            setBookedSeats(response.data);
-        })
-        .catch((error) => {
+            return response.data;
+        } catch (error) {
             console.error("Error getting booked seats:", error);
-        });
+            throw error;
+        }
     };
-
-    const revertSeatAvailability = async () => {
+    
+    const revertSeatAvailability = async (bookedSeats) => {
         try {
             const revertPromises = bookedSeats.map(async (seat) => {
                 const { flightID, seatNo } = seat;
@@ -84,7 +64,31 @@ const ManageBooking = () => {
             await Promise.all(revertPromises);
         } catch (error) {
             console.error("Error reverting seats:", error);
+            throw error;
         }
+    };
+    
+    const cancelBooking = async (bookingID) => {
+        try {
+            const response = await axios.put(`http://localhost:3001/api/booking/cancel_booking?bookingID=${bookingID}`);
+            console.log("Cancel successful");
+            console.log(response.data);
+        } catch (error) {
+            console.error("Error cancelling Booking:", error);
+            throw error;
+        }
+    };
+    
+    const searchBookings = () => {
+        axios.get("http://localhost:3001/api/booking/get_booking", {
+            params: bookingCriteria
+        })
+        .then((response) => {
+            setSearchResults(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching Bookings:", error);
+        });
     };
 
     return (
