@@ -569,7 +569,26 @@ app.post("/api/registered_user/use_companion_ticket", (req, res) => {
 // ----------------------- END: ADDING AND MANAGING REGISTERED USERS ------------------------
 
 
-
+// ----------------------- START: AIRLINE AGENT ACTIONS ------------------------
+// airline agent login
+app.get("/api/airline_agent/get_user", (req, res) => {
+  let params = req.query;  
+  var sql = "SELECT * FROM AIRLINE_AGENT \
+            WHERE email = ? AND password = ?;";
+  con.query(
+    sql, 
+    [
+      params.email,
+      params.password
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

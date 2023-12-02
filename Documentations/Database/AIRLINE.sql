@@ -130,6 +130,21 @@ VALUES
 ('coolguy@gmail.com', 'Cool', 'Guy', '123 4st Street', '1993-01-01', 'pword123456'),
 ('example@gmail.com', 'Ex', 'Ample', '123 5st Street', '1994-01-01', 'pword1234567');
 
+DROP TABLE IF EXISTS AIRLINE_AGENT;
+CREATE TABLE AIRLINE_AGENT (
+	userID int not null auto_increment,
+    email varchar(50) not null,
+    password varchar(20) not null,
+    primary key (userID)
+);
+
+INSERT INTO AIRLINE_AGENT (email, password)
+VALUES
+('arlineuser1@gmail.com', '123'),
+('arlineuser2@gmail.com', '123'),
+('arlineuser3@gmail.com', '123');
+
+
 DROP TABLE IF EXISTS AIRLINE_CREDIT_CARD;
 CREATE TABLE AIRLINE_CREDIT_CARD (
     cardNo int not null auto_increment,

@@ -45,7 +45,7 @@ const LoginRegisterPage = () => {
             if (response.data.length === 1) {
                 handleLoginButton();
             } else {
-                console.log("Incorrect email or password");
+                alert("Incorrect email or password");
             }
         })
         .catch((error) => {
@@ -96,7 +96,7 @@ const LoginRegisterPage = () => {
                 <h2>Login</h2>
                 <form onSubmit={handleLoginButton}>
                     <div className="input-group">
-                        <label htmlFor="emailLogin">Username or Email:</label>
+                        <label htmlFor="emailLogin">Email:</label>
                         <input  
                             type="text" 
                             id="emailLogin"  
