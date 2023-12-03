@@ -358,7 +358,7 @@ const AdminHome = () => {
             </div>
             {/* Edit Flight Modal */}
             {editModalVisible && (
-                <div className="modal">
+                <div className="card">
                     <div className="modal-content">
                         <h2>Edit Flight</h2>
                         <form>
