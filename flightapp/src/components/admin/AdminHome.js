@@ -146,7 +146,7 @@ const AdminHome = () => {
             .catch((error) => {
                 console.error("Error fetching flight data:", error);
             });
-    }, []);
+    }, [flights]);
 
     const [editedFlight, setEditedFlight] = useState({
         flightID: null,
