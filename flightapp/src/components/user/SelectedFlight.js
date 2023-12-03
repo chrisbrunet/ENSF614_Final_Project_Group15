@@ -46,28 +46,10 @@ const SelectedFlight = () => {
         navigate('/Home');
     };
 
-    // const handleConfirmPayButton = async () => {
-    //     alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
-    //     try {
-    //         const bookingResponse = await createBooking();
-    //         const bookingID = bookingResponse.data.insertId;
-    //         console.log(bookingID);
-
-    //         await updateSeatAvailability();
-    //         if (bookingID) {
-    //             await addSeatsToBooking(bookingID);
-    //         } else {
-    //             console.error("Invalid lastInsertID");
-    //         }
-    //         navigate('/Home');
-    //     } catch (error) {
-    //         console.error("Error creating booking:", error);
-    //     }
-    // };
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
     const handleConfirmPayButton = () => {
-        alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
+        alert(`Your Booking Has Been Created!`);
         try {
             createBooking().then((bookingResponse) => {
                 if (bookingResponse && bookingResponse.data.insertId) {
@@ -286,6 +268,7 @@ const SelectedFlight = () => {
     }
 
     const handleSendReceiptButton = () => {
+        alert(`A reciept has been emailed to ${userDetails.email}.`)
         const templateParams = {
             to_email: userDetails.email,
             subject: 'Flight Receipt',
