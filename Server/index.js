@@ -562,6 +562,28 @@ app.post("/api/registered_user/use_companion_ticket", (req, res) => {
     }
   );
 });
+
+app.put("/api/flight/update/:flightID", (req, res) => {
+  let flightID = req.params.flightID;
+  let data = req.body;
+  var sql =
+      "UPDATE FLIGHT SET departCity = ?, arriveCity = ?, flightDate = ? WHERE flightID = ?;";
+  con.query(
+      sql,
+      [data.departCity, data.arriveCity, data.flightDate, flightID],
+      (err, result) => {
+        if (err) {
+          console.error("Database error:", err);
+          res
+              .status(500)
+              .json({ success: false, error: "Internal server error" });
+        } else {
+          res.json({ success: true, result });
+        }
+      }
+  );
+});
+
 // ----------------------- END: ADDING AND MANAGING REGISTERED USERS ------------------------
 app.post("/api/aircraft", (req, res) => {
   let data = req.body;

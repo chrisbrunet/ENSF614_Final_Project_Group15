@@ -148,7 +148,39 @@ const AdminHome = () => {
             });
     }, []);
 
-
+    const [editedFlight, setEditedFlight] = useState({
+        flightID: null,
+        departCity: "",
+        arriveCity: "",
+        flightDate: "",
+    });
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const openEditModal = (flight) => {
+        setEditedFlight({
+            flightID: flight.flightID,
+            departCity: flight.departCity,
+            arriveCity: flight.arriveCity,
+            flightDate: flight.flightDate,
+        });
+        setEditModalVisible(true);
+    };
+    const handleFlightUpdate = () => {
+        axios
+            .put(`http://localhost:3001/api/flight/update/${editedFlight.flightID}`, {
+                departCity: editedFlight.departCity,
+                arriveCity: editedFlight.arriveCity,
+                flightDate: editedFlight.flightDate,
+            })
+            .then((response) => {
+                console.log(response.data);
+                alert("Flight updated successfully");
+                setEditModalVisible(false);
+            })
+            .catch((error) => {
+                console.error("Error updating flight:", error);
+                alert("Error updating flight");
+            });
+    };
     const renderForm = () => {
         switch (formType) {
             case 'addPlane':
@@ -306,21 +338,85 @@ const AdminHome = () => {
                         <th>Departure City</th>
                         <th>Arrival City</th>
                         <th>Date</th>
-
+                        <th>Action</th> {/* Add this column for the Edit button */}
                     </tr>
                     </thead>
                     <tbody>
-                    {flights.map(flight => (
+                    {flights.map((flight) => (
                         <tr key={flight.flightID}>
                             <td>{flight.flightID}</td>
                             <td>{flight.departCity}</td>
                             <td>{flight.arriveCity}</td>
                             <td>{flight.flightDate}</td>
+                            <td>
+                                <button onClick={() => openEditModal(flight)}>Edit</button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </div>
+            {/* Edit Flight Modal */}
+            {editModalVisible && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>Edit Flight</h2>
+                        <form>
+                            <div className="input-group">
+                                <label htmlFor="editDepartCity">Departure City:</label>
+                                <input
+                                    type="text"
+                                    id="editDepartCity"
+                                    name="editDepartCity"
+                                    value={editedFlight.departCity}
+                                    onChange={(e) =>
+                                        setEditedFlight({
+                                            ...editedFlight,
+                                            departCity: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label htmlFor="editArriveCity">Arrival City:</label>
+                                <input
+                                    type="text"
+                                    id="editArriveCity"
+                                    name="editArriveCity"
+                                    value={editedFlight.arriveCity}
+                                    onChange={(e) =>
+                                        setEditedFlight({
+                                            ...editedFlight,
+                                            arriveCity: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label htmlFor="editFlightDate">Flight Date:</label>
+                                <input
+                                    type="date"
+                                    id="editFlightDate"
+                                    name="editFlightDate"
+                                    value={editedFlight.flightDate}
+                                    onChange={(e) =>
+                                        setEditedFlight({
+                                            ...editedFlight,
+                                            flightDate: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+                            <button type="button" onClick={handleFlightUpdate}>
+                                Update
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             <div className="card">
                 <h2>All Aircraft</h2>
