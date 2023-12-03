@@ -108,7 +108,27 @@ VALUES
 ('17A', 1, 'Ordinary', 17, 'A'), ('17B', 1, 'Ordinary', 17, 'B'), ('17C', 1, 'Ordinary', 17, 'C'), ('17D', 1, 'Ordinary', 17, 'D'), ('17E', 1, 'Ordinary', 17, 'E'), ('17F', 1, 'Ordinary', 17, 'F'),
 ('18A', 1, 'Ordinary', 18, 'A'), ('18B', 1, 'Ordinary', 18, 'B'), ('18C', 1, 'Ordinary', 18, 'C'), ('18D', 1, 'Ordinary', 18, 'D'), ('18E', 1, 'Ordinary', 18, 'E'), ('18F', 1, 'Ordinary', 18, 'F'),
 ('19A', 1, 'Ordinary', 19, 'A'), ('19B', 1, 'Ordinary', 19, 'B'), ('19C', 1, 'Ordinary', 19, 'C'), ('19D', 1, 'Ordinary', 19, 'D'), ('19E', 1, 'Ordinary', 19, 'E'), ('19F', 1, 'Ordinary', 19, 'F'),
-('20A', 1, 'Ordinary', 20, 'A'), ('20B', 1, 'Ordinary', 20, 'B'), ('20C', 1, 'Ordinary', 20, 'C'), ('20D', 1, 'Ordinary', 20, 'D'), ('20E', 1, 'Ordinary', 20, 'E'), ('20F', 1, 'Ordinary', 20, 'F');
+('20A', 1, 'Ordinary', 20, 'A'), ('20B', 1, 'Ordinary', 20, 'B'), ('20C', 1, 'Ordinary', 20, 'C'), ('20D', 1, 'Ordinary', 20, 'D'), ('20E', 1, 'Ordinary', 20, 'E'), ('20F', 1, 'Ordinary', 20, 'F'),
+('1A', 2, 'Business', 1, 'A'), ('1B', 2, 'Business', 1, 'B'), ('1C', 2, 'Business', 1, 'C'), ('1D', 2, 'Business', 1, 'D'), ('1E', 2, 'Business', 1, 'E'), ('1F', 2, 'Business', 1, 'F'),
+('2A', 2, 'Business', 2, 'A'), ('2B', 2, 'Business', 2, 'B'), ('2C', 2, 'Business', 2, 'C'), ('2D', 2, 'Business', 2, 'D'), ('2E', 2, 'Business', 2, 'E'), ('2F', 2, 'Business', 2, 'F'),
+('3A', 2, 'Business', 3, 'A'), ('3B', 2, 'Business', 3, 'B'), ('3C', 2, 'Business', 3, 'C'), ('3D', 2, 'Business', 3, 'D'), ('3E', 2, 'Business', 3, 'E'), ('3F', 2, 'Business', 3, 'F'),
+('4A', 2, 'Business', 4, 'A'), ('4B', 2, 'Business', 4, 'B'), ('4C', 2, 'Business', 4, 'C'), ('4D', 2, 'Business', 4, 'D'), ('4E', 2, 'Business', 4, 'E'), ('4F', 2, 'Business', 4, 'F'),
+('5A', 2, 'Business', 5, 'A'), ('5B', 2, 'Business', 5, 'B'), ('5C', 2, 'Business', 5, 'C'), ('5D', 2, 'Business', 5, 'D'), ('5E', 2, 'Business', 5, 'E'), ('5F', 2, 'Business', 5, 'F'),
+('6A', 2, 'Comfort', 6, 'A'), ('6B', 2, 'Comfort', 6, 'B'), ('6C', 2, 'Comfort', 6, 'C'), ('6D', 2, 'Comfort', 6, 'D'), ('6E', 2, 'Comfort', 6, 'E'), ('6F', 2, 'Comfort', 6, 'F'),
+('7A', 2, 'Comfort', 7, 'A'), ('7B', 2, 'Comfort', 7, 'B'), ('7C', 2, 'Comfort', 7, 'C'), ('7D', 2, 'Comfort', 7, 'D'), ('7E', 2, 'Comfort', 7, 'E'), ('7F', 2, 'Comfort', 7, 'F'),
+('8A', 2, 'Comfort', 8, 'A'), ('8B', 2, 'Comfort', 8, 'B'), ('8C', 2, 'Comfort', 8, 'C'), ('8D', 2, 'Comfort', 8, 'D'), ('8E', 2, 'Comfort', 8, 'E'), ('8F', 2, 'Comfort', 8, 'F'),
+('9A', 2, 'Comfort', 9, 'A'), ('9B', 2, 'Comfort', 9, 'B'), ('9C', 2, 'Comfort', 9, 'C'), ('9D', 2, 'Comfort', 9, 'D'), ('9E', 2, 'Comfort', 9, 'E'), ('9F', 2, 'Comfort', 9, 'F'),
+('10A', 2, 'Comfort', 10, 'A'), ('10B', 2, 'Comfort', 10, 'B'), ('10C', 2, 'Comfort', 10, 'C'), ('10D', 2, 'Comfort', 10, 'D'), ('10E', 2, 'Comfort', 10, 'E'), ('10F', 2, 'Comfort', 10, 'F'),
+('11A', 2, 'Ordinary', 11, 'A'), ('11B', 2, 'Ordinary', 11, 'B'), ('11C', 2, 'Ordinary', 11, 'C'), ('11D', 2, 'Ordinary', 11, 'D'), ('11E', 2, 'Ordinary', 11, 'E'), ('11F', 2, 'Ordinary', 11, 'F'),
+('12A', 2, 'Ordinary', 12, 'A'), ('12B', 2, 'Ordinary', 12, 'B'), ('12C', 2, 'Ordinary', 12, 'C'), ('12D', 2, 'Ordinary', 12, 'D'), ('12E', 2, 'Ordinary', 12, 'E'), ('12F', 2, 'Ordinary', 12, 'F'),
+('13A', 2, 'Ordinary', 13, 'A'), ('13B', 2, 'Ordinary', 13, 'B'), ('13C', 2, 'Ordinary', 13, 'C'), ('13D', 2, 'Ordinary', 13, 'D'), ('13E', 2, 'Ordinary', 13, 'E'), ('13F', 2, 'Ordinary', 13, 'F'),
+('14A', 2, 'Ordinary', 14, 'A'), ('14B', 2, 'Ordinary', 14, 'B'), ('14C', 2, 'Ordinary', 14, 'C'), ('14D', 2, 'Ordinary', 14, 'D'), ('14E', 2, 'Ordinary', 14, 'E'), ('14F', 2, 'Ordinary', 14, 'F'),
+('15A', 2, 'Ordinary', 15, 'A'), ('15B', 2, 'Ordinary', 15, 'B'), ('15C', 2, 'Ordinary', 15, 'C'), ('15D', 2, 'Ordinary', 15, 'D'), ('15E', 2, 'Ordinary', 15, 'E'), ('15F', 2, 'Ordinary', 15, 'F'),
+('16A', 2, 'Ordinary', 16, 'A'), ('16B', 2, 'Ordinary', 16, 'B'), ('16C', 2, 'Ordinary', 16, 'C'), ('16D', 2, 'Ordinary', 16, 'D'), ('16E', 2, 'Ordinary', 16, 'E'), ('16F', 2, 'Ordinary', 16, 'F'),
+('17A', 2, 'Ordinary', 17, 'A'), ('17B', 2, 'Ordinary', 17, 'B'), ('17C', 2, 'Ordinary', 17, 'C'), ('17D', 2, 'Ordinary', 17, 'D'), ('17E', 2, 'Ordinary', 17, 'E'), ('17F', 2, 'Ordinary', 17, 'F'),
+('18A', 2, 'Ordinary', 18, 'A'), ('18B', 2, 'Ordinary', 18, 'B'), ('18C', 2, 'Ordinary', 18, 'C'), ('18D', 2, 'Ordinary', 18, 'D'), ('18E', 2, 'Ordinary', 18, 'E'), ('18F', 2, 'Ordinary', 18, 'F'),
+('19A', 2, 'Ordinary', 19, 'A'), ('19B', 2, 'Ordinary', 19, 'B'), ('19C', 2, 'Ordinary', 19, 'C'), ('19D', 2, 'Ordinary', 19, 'D'), ('19E', 2, 'Ordinary', 19, 'E'), ('19F', 2, 'Ordinary', 19, 'F'),
+('20A', 2, 'Ordinary', 20, 'A'), ('20B', 2, 'Ordinary', 20, 'B'), ('20C', 2, 'Ordinary', 20, 'C'), ('20D', 2, 'Ordinary', 20, 'D'), ('20E', 2, 'Ordinary', 20, 'E'), ('20F', 2, 'Ordinary', 20, 'F');
 
 DROP TABLE IF EXISTS REGISTERED_USER;
 CREATE TABLE REGISTERED_USER (
