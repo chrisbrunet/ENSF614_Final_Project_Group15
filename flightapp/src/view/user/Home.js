@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import '../css/styles.css';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useUser } from '../../controller/user';
 
 const Home = () => {
     const navigate = useNavigate();
+    const {
+        flightCriteria,
+        setFlightCriteria,
+        allFlights,
+        searchResults,
+        getAllFlights,
+        searchFlights,
+        resetFilters,
+        formatDateString,
+    } = useUser(); 
 
     const handleAccessPortal = () => {
         navigate('/userPortal');
@@ -24,61 +34,6 @@ const Home = () => {
 
     const handleAgentLoginButton = () => {
         navigate('/agentLogin');
-    };
-
-    const formatDateString = (dateString) => {
-        const date = new Date(dateString);
-        return date.toISOString().substring(0, 10);
-    };
-
-    const [flightCriteria, setFlightCriteria] = useState({
-        departCity: '',
-        arriveCity: '',
-        flightDate: '',
-    });
-
-    const [allFlights, setAllFlights] = useState([]);
-    const [searchResults, setSearchResults] = useState([]);
-
-    const getAllFlights = async () => {
-        try {
-            const response = await axios.get("http://localhost:3001/api/all_flights");
-            console.log(response.data);
-            setAllFlights(response.data);
-            setSearchResults(response.data);
-        } catch (error) {
-            console.error("Error fetching flights:", error);
-        }
-    };
-
-    const searchFlights = () => {
-        const filteredFlights = allFlights.filter((flight) => {
-            const lowerDepartCity = flight.departCity.toLowerCase();
-            const lowerArriveCity = flight.arriveCity.toLowerCase();
-            const criteriaDepartCity = flightCriteria.departCity.toLowerCase();
-            const criteriaArriveCity = flightCriteria.arriveCity.toLowerCase();
-            const criteriaDate = flightCriteria.flightDate;
-
-            const departCityMatches = lowerDepartCity.includes(criteriaDepartCity);
-            const arriveCityMatches = lowerArriveCity.includes(criteriaArriveCity);
-
-            const dateMatches = criteriaDate
-                ? formatDateString(flight.flightDate) === flightCriteria.flightDate
-                : true; // If no date provided, consider it a match
-
-            return departCityMatches && arriveCityMatches && dateMatches;
-        });
-
-        setSearchResults(filteredFlights);
-    };
-
-    const resetFilters = () => {
-        setFlightCriteria({
-            departCity: '',
-            arriveCity: '',
-            flightDate: '',
-        });
-        setSearchResults(allFlights);
     };
 
     useEffect(() => {

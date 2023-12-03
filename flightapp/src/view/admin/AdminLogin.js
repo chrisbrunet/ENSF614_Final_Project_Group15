@@ -1,53 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useAdmin } from '../../controller/admin';
 
-const AgentLogin = () => {
+const AdminLoginPage = () => {
+
+    const {
+        login,
+        loginDetails,
+        setLoginDetails,
+        handleAdminLoginButton
+    } = useAdmin();
+
+
     const navigate = useNavigate();
 
     const handleHomeButton = () => {
         navigate('/Home');
     };
 
-    const handleAgentLoginButton = () => {
-        navigate('/agentHome');
-    };
-
-    const [loginDetails, setLoginDetails] = useState({
-        email: "",
-        password: ""
-    });
-
-    const login = () => {
-        axios.get("http://localhost:3001/api/airline_agent/get_user", {
-          params: loginDetails
-        })
-        .then((response) => {
-            console.log(response.data);
-            if (response.data.length === 1) {
-                handleAgentLoginButton();
-            } else {
-                alert("Incorrect email or password");
-            }
-        })
-        .catch((error) => {
-            console.error("Error fetching login details:", error);
-        });
-    };
-
     return (
         <div>
             <div className="navbar">
-                <h1>Airline Agent Login</h1>
-                <button onClick={() => { handleHomeButton() }} className="btn">
+                <h1>Admin Login</h1>
+                <button onClick={handleHomeButton} className="btn">
                     Home
                 </button>
             </div>
 
             <div className="card">
                 <h2>Login</h2>
-                <form onSubmit={handleAgentLoginButton}>
+                <form onSubmit={handleAdminLoginButton}>
                     <div className="input-group">
                         <label htmlFor="emailLogin">Email:</label>
                         <input  
@@ -82,4 +65,4 @@ const AgentLogin = () => {
     );
 };
 
-export default AgentLogin;
+export default AdminLoginPage;

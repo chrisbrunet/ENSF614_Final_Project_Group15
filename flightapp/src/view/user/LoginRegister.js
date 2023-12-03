@@ -1,11 +1,18 @@
-import React, { useState, useEffect, useContext   } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../controller/user';
 import axios from 'axios';
-import AppContext from '../../context/AppContext';
+
 const LoginRegisterPage = () => {
+    const {
+        login,
+        loginDetails,
+        setLoginDetails
+    } = useUser();
+
     const navigate = useNavigate();
-    const { user, setUser } = useContext(AppContext);
+
     const handleHomeButton = () => {
         navigate('/Home');
     };
@@ -23,43 +30,12 @@ const LoginRegisterPage = () => {
     };
 
     const [password, setPassword] = useState("");
-
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [address, setAddress] = useState("");
     const [birthdate, setBirthdate] = useState("");
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
-
-    const [loginDetails, setLoginDetails] = useState({
-        email: "",
-        password: ""
-    });
-
-
-    const login = () => {
-        axios.get("http://localhost:3001/api/registered_user/get_user", {
-          params: loginDetails
-        })
-        .then((response) => {
-            console.log(response.data);
-            if (response.data.length === 1) {
-                console.log(response)
-                setUser({
-                    ...user,
-                    userId: response.data[0].email,
-                    fname: response.data[0].firstName,
-                    lname: response.data[0].lastName
-                });
-                handleLoginButton();
-            } else {
-                alert("Incorrect email or password");
-            }
-        })
-        .catch((error) => {
-            console.error("Error fetching login details:", error);
-        });
-    };
 
     const handleRegister  = (e) => {
         e.preventDefault()
@@ -83,6 +59,7 @@ const LoginRegisterPage = () => {
                 alert("Registration failed. See console for details.");
             });
     };
+
     useEffect(() => {
         if (registrationSuccess) {
             navigate('/UserProfile');

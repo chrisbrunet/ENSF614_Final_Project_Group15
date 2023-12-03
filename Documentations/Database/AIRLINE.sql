@@ -160,9 +160,9 @@ CREATE TABLE AIRLINE_AGENT (
 
 INSERT INTO AIRLINE_AGENT (email, password)
 VALUES
-('arlineuser1@gmail.com', '123'),
-('arlineuser2@gmail.com', '123'),
-('arlineuser3@gmail.com', '123');
+('airlineuser1@gmail.com', '123'),
+('airlineuser2@gmail.com', '123'),
+('airlineuser3@gmail.com', '123');
 
 DROP TABLE IF EXISTS SYS_ADMIN;
 CREATE TABLE SYS_ADMIN (
@@ -295,3 +295,5 @@ VALUES
 UPDATE SEATS AS s
 JOIN BOOKED_SEATS AS b ON s.seatNo = b.seatNo AND s.flightID = b.flightID
 SET s.availability = 1;
+
+select * from REGISTERED_USER;

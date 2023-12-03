@@ -1,7 +1,7 @@
 import './App.css';
 import AppState from './context/AppState';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Navigation from './components/routes/Navigation';
+import Navigation from './view/routes/Navigation';
 import { Link } from 'react-router-dom';
 
 function App() {
