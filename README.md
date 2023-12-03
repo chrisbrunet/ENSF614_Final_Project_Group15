@@ -7,11 +7,8 @@ git clone https://github.com/chrisbrunet/ENSF614_Final_Project_Group15.git
 
 ### How to Launch and Run the MySQL Server
 1. Download a version of MySQL Workbench
-```
 2. Open the SQL Script located in Documentation/Database/AIRLINE.sql
-```
 3. Execute the selected script
-```
 
 ### How to Launch Project Server and APIs (Note, you must open a seperate instance of cmd for this)
 1. Open a new terminal and Navigate to the 'Server' folder by running
