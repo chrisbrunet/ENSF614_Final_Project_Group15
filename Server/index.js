@@ -583,8 +583,29 @@ app.put("/api/flight/update/:flightID", (req, res) => {
       }
   );
 });
-
 // ----------------------- END: ADDING AND MANAGING REGISTERED USERS ------------------------
+
+
+// ----------------------- START: ADMIN ACTIONS ------------------------
+// admin agent login
+app.get("/api/admin/get_user", (req, res) => {
+  let params = req.query;  
+  var sql = "SELECT * FROM SYS_ADMIN \
+            WHERE email = ? AND password = ?;";
+  con.query(
+    sql, 
+    [
+      params.email,
+      params.password
+    ],
+  (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result)
+    }
+  });
+});
 app.post("/api/aircraft", (req, res) => {
   let data = req.body;
   var sql = "INSERT INTO AIRCRAFT (crewID, aircraftType, numBusinessRows, numComfortRows, numEconomyRows) \
@@ -679,6 +700,8 @@ app.get("/api/get_aircrafts", (req, res) => {
     }
   });
 });
+// ----------------------- END: ADMIN ACTIONS ------------------------
+
 
 // ----------------------- START: AIRLINE AGENT ACTIONS ------------------------
 // airline agent login

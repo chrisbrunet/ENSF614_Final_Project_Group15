@@ -144,6 +144,20 @@ VALUES
 ('arlineuser2@gmail.com', '123'),
 ('arlineuser3@gmail.com', '123');
 
+DROP TABLE IF EXISTS SYS_ADMIN;
+CREATE TABLE SYS_ADMIN (
+	userID int not null auto_increment,
+    email varchar(50) not null,
+    password varchar(20) not null,
+    primary key (userID)
+);
+
+INSERT INTO SYS_ADMIN (email, password)
+VALUES
+('admin1@gmail.com', '123'),
+('admin2@gmail.com', '123'),
+('admin3@gmail.com', '123');
+
 
 DROP TABLE IF EXISTS AIRLINE_CREDIT_CARD;
 CREATE TABLE AIRLINE_CREDIT_CARD (

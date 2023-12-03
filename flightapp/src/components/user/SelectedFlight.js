@@ -350,7 +350,7 @@ const SelectedFlight = () => {
                                 <input type="text" id="cardNO" name="cardNO" pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
                                        title="Please enter a valid credit card number"
                                        required
-                                       onChange={(e) => formatCreditCardNumber(e)}required />
+                                       onChange={(e) => formatCreditCardNumber(e)} />
                             </div>
                             <div class="input-group">
                                 <label for="arrivalAirport">Expiry Date:</label>

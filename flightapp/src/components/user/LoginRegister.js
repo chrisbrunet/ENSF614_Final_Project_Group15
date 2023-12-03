@@ -57,7 +57,7 @@ const LoginRegisterPage = () => {
             }
         })
         .catch((error) => {
-            console.error("Error fetching flights:", error);
+            console.error("Error fetching login details:", error);
         });
     };
 
