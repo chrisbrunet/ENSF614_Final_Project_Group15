@@ -220,29 +220,24 @@ app.put("/api/flight/update_seat_availability", (req, res) => {
 
 // add seat to booking 
 app.post("/api/flight/add_seats_to_booking", (req, res) => {
-  let params = req.query;
+  let params = req.body; // Use req.body instead of req.query for POST requests
   console.log(params);
   var sql = "INSERT INTO BOOKED_SEATS (bookingID, seatNo, flightID) \
             VALUES (?, ?, ?);";
   con.query(
-    sql,
-    [
-      // TEST PARAMS
-      // '1',
-      // '2C',
-      // '1'
-      params.bookingID,
-      params.seatNo,
-      params.flightID
-    ],
-    (err, result) => {
-      if (err) {
-        res.status(500).send(err);
+      sql,
+      [
+        params.bookingID,
+        params.seatNo,
+        params.flightID
+      ],
+      (err, result) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.send(result);
+        }
       }
-      else {
-        res.send(result)
-      } 
-    }
   );
 });
 
@@ -647,6 +642,18 @@ app.delete('/api/crew/remove/:crewID', (req, res) => {
           res.json({ success: true, message: 'Crew member removed successfully' });
         }
       });
+    }
+  });
+});
+app.get("/api/get_aircrafts", (req, res) => {
+  const sql = "SELECT * FROM AIRCRAFT";
+
+  con.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error fetching aircraft data:', err);
+      res.status(500).send(err);
+    } else {
+      res.json(result);
     }
   });
 });

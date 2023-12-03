@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,22 +11,24 @@ const AdminHome = () => {
     const [planeNumBusinessRows, setPlaneNumBusinessRows] = useState(5);
     const [planeNumComfortRows, setPlaneNumComfortRows] = useState(5);
     const [planeNumEconomyRows, setPlaneNumEconomyRows] = useState(10);
-    const handlePlaneAdd  = (e) => {
-        e.preventDefault()
+    const handlePlaneAdd = (e) => {
+        e.preventDefault();
         axios.post('http://localhost:3001/api/aircraft', {
             crewID: planeCrewID,
             aircraftType: planeAircraftType,
             numBusinessRows: planeNumBusinessRows,
             numComfortRows: planeNumComfortRows,
             numEconomyRows: planeNumEconomyRows,
-        }).then((response) => {
-            console.log(response);
-            if (response.data.success) {
-                alert("added aircraft")
-            } else {
-                alert(response.data);
-            }
         })
+            .then((response) => {
+                console.log(response);
+                if (response.data.success) {
+                    alert("added aircraft");
+                    setAircraftList([...aircraftList, response.data]); // Update the state with the new aircraft
+                } else {
+                    alert(response.data);
+                }
+            })
             .catch((error) => {
                 console.error("Error during registration:", error);
                 alert("Registration failed. See console for details.");
@@ -51,12 +53,13 @@ const AdminHome = () => {
                 alert("Registration failed. See console for details.");
             });
     };
+    const [registeredUsers, setRegisteredUsers] = useState([]);
 
     const printUsers = () => {
-        axios.get("http://localhost:3001/api/print_registered_user", {
-        })
+        axios.get("http://localhost:3001/api/print_registered_user", {})
             .then((response) => {
                 console.log(response.data.registeredUsers);
+                setRegisteredUsers(response.data.registeredUsers); // Update the state with the fetched users
             })
             .catch((error) => {
                 console.error("Error fetching registered users:", error);
@@ -68,13 +71,12 @@ const AdminHome = () => {
         axios.delete(`http://localhost:3001/api/flight/remove/${aircraftID}`)
             .then((response) => {
                 console.log(response.data);
-                alert("removed aircraft")
-                // Handle the success message as needed
+                alert("removed aircraft");
+                setAircraftList(aircraftList.filter(aircraft => aircraft.aircraftID !== aircraftID)); // Update the state by removing the deleted aircraft
             })
             .catch((error) => {
                 console.error("Error removing flight:", error);
-                alert("Error removing aircraft")
-                // Handle the error as needed
+                alert("Error removing aircraft");
             });
     };
 
@@ -111,6 +113,41 @@ const AdminHome = () => {
     const registerdUsersAlert = () => {
         alert('Printing List of Registered Users...');
     };
+    const [registeredUsersVisible, setRegisteredUsersVisible] = useState(false);
+
+    const toggleRegisteredUsersList = () => {
+        // Toggle the visibility state
+        setRegisteredUsersVisible(!registeredUsersVisible);
+        // If becoming visible, fetch the users
+        if (!registeredUsersVisible) {
+            printUsers();
+        }
+    };
+
+    const [aircraftList, setAircraftList] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/get_aircrafts')
+            .then((response) => {
+                setAircraftList(response.data); // Just use response.data directly
+            })
+            .catch((error) => {
+                console.error("Error fetching aircraft data:", error);
+            });
+    }, [aircraftList]);
+
+    const [flights, setFlights] = useState([]);
+    useEffect(() => {
+        // Fetch the list of flights from the server
+        axios.get('http://localhost:3001/api/all_flights')
+            .then((response) => {
+                setFlights(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching flight data:", error);
+            });
+    }, []);
+
 
     const renderForm = () => {
         switch (formType) {
@@ -269,38 +306,18 @@ const AdminHome = () => {
                         <th>Departure City</th>
                         <th>Arrival City</th>
                         <th>Date</th>
-                        <th>Crew</th>
+
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Example</td>
-                        <td>New York <button className="btn">Change</button></td>
-                        <td>Los Angeles <button className="btn">Change</button></td>
-                        <td>2023-11-25 <button className="btn">Change</button></td>
-                        <td>A <button className="btn">Change</button></td>
-                    </tr>
-                    <tr>
-                        <td>FL123</td>
-                        <td>Calgary <button className="btn">Change</button></td>
-                        <td>Toronto <button className="btn">Change</button></td>
-                        <td>2023-12-01 <button className="btn">Change</button></td>
-                        <td>B <button className="btn">Change</button></td>
-                    </tr>
-                    <tr>
-                        <td>FL124</td>
-                        <td>Vancouver <button className="btn">Change</button></td>
-                        <td>Tokyo <button className="btn">Change</button></td>
-                        <td>2023-12-05 <button className="btn">Change</button></td>
-                        <td>C <button className="btn">Change</button></td>
-                    </tr>
-                    <tr>
-                        <td>FL125</td>
-                        <td>Los Angeles <button className="btn">Change</button></td>
-                        <td>Space <button className="btn">Change</button></td>
-                        <td>2023-12-05 <button className="btn">Change</button></td>
-                        <td>A <button className="btn">Change</button></td>
-                    </tr>
+                    {flights.map(flight => (
+                        <tr key={flight.flightID}>
+                            <td>{flight.flightID}</td>
+                            <td>{flight.departCity}</td>
+                            <td>{flight.arriveCity}</td>
+                            <td>{flight.flightDate}</td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
@@ -312,21 +329,16 @@ const AdminHome = () => {
                     <tr>
                         <th>Aircraft ID</th>
                         <th>Type</th>
+                        {/* Add more table headers as needed */}
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>AC-130</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>F22</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>F14</td>
-                    </tr>
+                    {aircraftList.map(aircraft => (
+                        <tr key={aircraft.aircraftID}>
+                            <td>{aircraft.aircraftID}</td>
+                            <td>{aircraft.aircraftType}</td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
@@ -334,10 +346,10 @@ const AdminHome = () => {
             <div className="card">
                 <h2>Options</h2>
                 <button onClick={() => toggleForm('addPlane')} className="btn">
-                    Add Plane
+                    Add Aircraft
                 </button>
                 <button onClick={() => toggleForm('removePlane')} className="btn">
-                    Remove Plane
+                    Remove Aircraft
                 </button>
                 <button onClick={() => toggleForm('addCrew')} className="btn">
                     Add Crew
@@ -345,15 +357,27 @@ const AdminHome = () => {
                 <button onClick={() => toggleForm('removeCrew')} className="btn">
                     Remove Crew
                 </button>
-                <button onClick={() => toggleForm('addDest')} className="btn">
-                    Add Destination
+                <button onClick={toggleRegisteredUsersList} className="btn">
+                    {registeredUsersVisible ? "Hide" : "Print"} Registered User List
                 </button>
-                <button onClick={() => toggleForm('removeDest')} className="btn">
-                    Remove Destination
-                </button>
-                <button onClick={printUsers} className="btn">
-                    Print Registered User List
-                </button>
+
+                {registeredUsersVisible && registeredUsers.length > 0 && (
+                    <div className="card">
+                        <h2>Registered Users</h2>
+                        <ul>
+                            {registeredUsers.map(user => (
+                                <li key={user.userID}>
+                                    <strong>User ID:</strong> {user.userID}<br />
+                                    <strong>Email:</strong> {user.email}<br />
+                                    <strong>First Name:</strong> {user.firstName}<br />
+                                    <strong>Last Name:</strong> {user.lastName}<br />
+                                    <br />
+                                    {/* Add more details as needed */}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
 
             {renderForm()}

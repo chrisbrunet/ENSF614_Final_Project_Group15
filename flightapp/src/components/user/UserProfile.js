@@ -16,11 +16,11 @@ const UserProfile = () => {
     };
 
     const showPromoAlert = () => {
-        alert("You Have Subscribed for the Monthly Promotions!");
+        alert("You Have Subscribed for the Monthly Promotions. Please check your email for any offers!");
     };
 
     const showCompanionAlert = () => {
-        alert("You Have Successfully Claimed Your Companion Ticket!");
+        alert("Please contact customer support to claim your Companion Ticket!");
     };
 
     return (

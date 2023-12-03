@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../css/styles.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import emailjs from "emailjs-com";
 
 
 const ManageBooking = () => {
@@ -26,13 +27,14 @@ const ManageBooking = () => {
     });
 
     const [searchResults, setSearchResults] = useState([]);
-    
+
     const handleCancelBooking = async (bookingID) => {
         alert(`Your Booking Has Been Cancelled. An Email has been sent to ${bookingCriteria.userEmail} for confirmation`);
-    
+
         try {
             const bookedSeats = await getBookedSeats(bookingID);
             console.log(bookedSeats);
+            handleSendReceiptButton(bookingCriteria.userEmail)
             await revertSeatAvailability(bookedSeats);
             await cancelBooking(bookingID);
             searchBookings();
@@ -40,7 +42,7 @@ const ManageBooking = () => {
             console.error("Error cancelling booking:", error);
         }
     };
-    
+
     const getBookedSeats = async (bookingID) => {
         try {
             const response = await axios.get(`http://localhost:3001/api/booking/get_booked_seats?bookingID=${bookingID}`);
@@ -51,7 +53,7 @@ const ManageBooking = () => {
             throw error;
         }
     };
-    
+
     const revertSeatAvailability = async (bookedSeats) => {
         try {
             const revertPromises = bookedSeats.map(async (seat) => {
@@ -67,7 +69,7 @@ const ManageBooking = () => {
             throw error;
         }
     };
-    
+
     const cancelBooking = async (bookingID) => {
         try {
             const response = await axios.put(`http://localhost:3001/api/booking/cancel_booking?bookingID=${bookingID}`);
@@ -78,7 +80,7 @@ const ManageBooking = () => {
             throw error;
         }
     };
-    
+
     const searchBookings = () => {
         axios.get("http://localhost:3001/api/booking/get_booking", {
             params: bookingCriteria
@@ -89,6 +91,27 @@ const ManageBooking = () => {
         .catch((error) => {
             console.error("Error fetching Bookings:", error);
         });
+    };
+
+    const handleSendReceiptButton = (email) => {
+        const templateParams = {
+            to_email: email,
+            subject: 'Flight Cancelled',
+            message: `You have been refunded for your payment. We hope to see you again.`,
+        };
+
+        emailjs.send(
+            'service_tv1w3i4',
+            'template_6xww3jg',
+            templateParams,
+            'tycYXJZe_DlMa25fW'
+        )
+            .then((response) => {
+                console.log('Email sent successfully:', response);
+            })
+            .catch((error) => {
+                console.error('Error sending email:', error);
+            });
     };
 
     return (
@@ -104,32 +127,32 @@ const ManageBooking = () => {
                 <form onSubmit={handleSearchSubmit}>
                     <h2>Booking ID</h2>
                     <div className="input-group">
-                        <input  
-                            type="text" 
-                            id="bookingID" 
-                            name="bookingID" 
+                        <input
+                            type="text"
+                            id="bookingID"
+                            name="bookingID"
                             value={bookingCriteria.bookingID}
                             onChange={(e) => setBookingCriteria({ ...bookingCriteria, bookingID: e.target.value })}
-                            required 
+                            required
                         />
                     </div>
                     <h2>Email on Booking</h2>
                     <div className="input-group">
-                    <input  
-                            type="text" 
-                            id="email" 
-                            name="email" 
+                    <input
+                            type="text"
+                            id="email"
+                            name="email"
                             value={bookingCriteria.userEmail}
                             onChange={(e) => setBookingCriteria({ ...bookingCriteria, userEmail: e.target.value })}
-                            required 
+                            required
                         />
                     </div>
                     <button
                         onClick={(e) => {
-                            e.preventDefault(); 
+                            e.preventDefault();
                             searchBookings();
                         }}
-                        type="button" 
+                        type="button"
                         className="btn"
                     >Search Bookings</button>
                 </form>

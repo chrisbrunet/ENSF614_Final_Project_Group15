@@ -52,7 +52,7 @@ const SelectedFlight = () => {
     //         const bookingResponse = await createBooking();
     //         const bookingID = bookingResponse.data.insertId;
     //         console.log(bookingID);
-    
+
     //         await updateSeatAvailability();
     //         if (bookingID) {
     //             await addSeatsToBooking(bookingID);
@@ -63,23 +63,57 @@ const SelectedFlight = () => {
     //     } catch (error) {
     //         console.error("Error creating booking:", error);
     //     }
-    // };    
+    // };
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
-    const handleConfirmPayButton = async () => {
+    const handleConfirmPayButton = () => {
         alert(`Your Booking Has Been Created! An Email has been sent to ${userDetails.email} for confirmation`);
         try {
-            await createBooking();
-            setPaymentConfirmed(true)
-            await updateSeatAvailability();
-            navigate('/Home');
+            createBooking().then((bookingResponse) => {
+                if (bookingResponse && bookingResponse.data.insertId) {
+                    // Update seat availability
+                    updateSeatAvailability().then(() => {
+                        // Add seats to booking
+                        return addSeatsToBooking(bookingResponse.data.insertId);
+                    }).then(() => {
+                        // If needed, perform additional actions after adding seats
+                        console.log("Seats added to booking");
+                    }).catch((error) => {
+                        console.error("Error updating seat availability or adding seats:", error);
+                    });
+
+                    setPaymentConfirmed(true);
+                } else {
+                    console.error("Invalid bookingResponse");
+                }
+            }).catch((error) => {
+                console.error("Error creating booking:", error);
+            });
         } catch (error) {
             console.error("Error creating booking:", error);
         }
-    };    
+    };
+    const addSeatsToBooking = (bookingID) => {
+        const addSeatsPromises = selectedSeatIds.map((seatNo) => {
+            return axios.post(`http://localhost:3001/api/flight/add_seats_to_booking`, {
+                bookingID: bookingID,
+                seatNo: seatNo,
+                flightID: flightID
+            });
+        });
+
+        return Promise.all(addSeatsPromises)
+            .then((responses) => {
+                console.log("Seats added to booking:", responses);
+            })
+            .catch((error) => {
+                console.error("Error adding seats to booking:", error);
+                throw error;
+            });
+    };
 
     const getFlightInfo = (flightID) => {
-        axios.get(`http://localhost:3001/api/search_flights_by_id`, 
+        axios.get(`http://localhost:3001/api/search_flights_by_id`,
         {params: {
             flightID: flightID
           }
@@ -94,7 +128,7 @@ const SelectedFlight = () => {
     };
 
     const getSeatMap = (flightID) => {
-        axios.get(`http://localhost:3001/api/flight/seatmap`, 
+        axios.get(`http://localhost:3001/api/flight/seatmap`,
         {params: {
             flightID: flightID
           }
@@ -108,60 +142,58 @@ const SelectedFlight = () => {
         });
     };
 
-    const createBooking = async () => {
+    const createBooking = () => {
         var insuranceNum;
-        if(cancellationInsurance === false){
+        if (cancellationInsurance === false) {
             insuranceNum = 0;
         } else {
             insuranceNum = 1;
         }
 
-        try {
-            const response = await axios.post(`http://localhost:3001/api/flight/new_booking`, {
-                flightID: flightID,
-                userEmail: userDetails.email,
-                insurance: `${insuranceNum}`,
-                price: `${totalPrice}`
-            });
-            console.log("Booking successful");
-            setLastInsertID(response.data.insertId);
-            console.log(response.data.insertId);
-        } catch (error) {
-            console.error("Error creating Booking:", error);
-            throw error;
-        }
-    };
+        return axios.post(`http://localhost:3001/api/flight/new_booking`, {
+            flightID: flightID,
+            userEmail: userDetails.email,
+            insurance: `${insuranceNum}`,
+            price: `${totalPrice}`
+        })
+            .then((response) => {
+                console.log("Booking successful");
+                setLastInsertID(response.data.insertId);
+                console.log(response.data.insertId);
 
-    const updateSeatAvailability = async () => {
-        try {
-            const revertPromises = selectedSeatIds.map(async (seatNo) => {
-                const response = await axios.put(`http://localhost:3001/api/flight/update_seat_availability?seatNo=${seatNo}&flightID=${flightID}`);
-                console.log("Seat updated");
-                console.log(response.data);
+                // Return the response so that it can be used in the next `then` block
                 return response;
+            })
+            .catch((error) => {
+                console.error("Error creating Booking:", error);
+                throw error;
             });
-            await Promise.all(revertPromises);
-        } catch (error) {
-            console.error("Error updating seats:", error);
-            throw error;
-        }
     };
 
-    // const addSeatsToBooking = async (bookingID, seatNo) => {
-    //     try {
-    //         const revertPromises = selectedSeatIds.map(async (seatNo) => {
-    //             const response = await axios.put(`http://localhost:3001/api/flight/add_seats_to_booking?bookingID=${bookingID}&seatNo=${seatNo}&flightID=${flightID}`);
-    //             console.log("Seat added to booking");
-    //             console.log(response.data);
-    //             return response;
-    //         });
-    //         await Promise.all(revertPromises);
-    //     } catch (error) {
-    //         console.error("Error updating booking:", error);
-    //         throw error;
-    //     }
-    // };
-    
+    const updateSeatAvailability = () => {
+        // Map over selected seats and update availability
+        const revertPromises = selectedSeatIds.map((seatNo) => {
+            return axios.put(`http://localhost:3001/api/flight/update_seat_availability?seatNo=${seatNo}&flightID=${flightID}`);
+        });
+
+        // Use Promise.all to wait for all promises to resolve
+        return Promise.all(revertPromises)
+            .then((responses) => {
+                // Optionally, process responses if needed
+                console.log("Seats updated:", responses);
+
+                // After updating seat availability, create the booking and add seats
+                return createBooking();
+            })
+            .catch((error) => {
+                // Handle errors related to updating seat availability
+                console.error("Error updating seats:", error);
+                throw error; // Rethrow the error to propagate it to the next catch block
+            });
+    };
+
+
+
 
     useEffect(() => {
        getFlightInfo(flightID);
@@ -197,7 +229,7 @@ const SelectedFlight = () => {
             if (selectedSeat) {
                 let seatPrice = selectedSeat.seatPrice;
                 console.log(seatPrice);
-        
+
                 newTotalPrice += seatPrice;
             } else {
                 console.log("Seat not found in seatData.");
@@ -279,7 +311,7 @@ const SelectedFlight = () => {
         <div>
             <div className="navbar">
             <h1>Flight {flightInfo.length > 0 ? flightInfo[0].flightID : 'Loading...'} from {flightInfo.length > 0 ? flightInfo[0].departCity : 'Loading...'} to {flightInfo.length > 0 ? flightInfo[0].arriveCity : 'Loading...'}
-            </h1>                
+            </h1>
             <button onClick={handleHomeButton} className="btn">
                     Home
                 </button>
@@ -331,12 +363,12 @@ const SelectedFlight = () => {
                             </div>
                             <div class="input-group">
                                 <label for="date">Email:</label>
-                                <input type="text" 
-                                    id="email" 
-                                    name="email" 
+                                <input type="text"
+                                    id="email"
+                                    name="email"
                                     value={userDetails.email}
                                     onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
-                                    required 
+                                    required
                                 />
                             </div>
                         </form>
