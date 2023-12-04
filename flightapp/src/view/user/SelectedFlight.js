@@ -272,7 +272,7 @@ const SelectedFlight = () => {
         const templateParams = {
             to_email: userDetails.email,
             subject: 'Flight Receipt',
-            message: `Thank you for your payment. Total Price: $${totalPrice}. Selected Seats: ${selectedSeatIds.join(', ')}.`,
+            message: `Thank you for your payment. Total Price: $${totalPrice}. Booking ID: ${lastInsertID-1}. Selected Seats: ${selectedSeatIds.join(', ')}.`,
         };
 
         emailjs.send(

@@ -318,18 +318,6 @@ const AdminHome = () => {
             </div>
 
             <div className="card">
-                <form>
-                    <h2>Search Flights</h2>
-                    <div className="input-group">
-                        <input type="text" id="bookingID" name="bookingID" required />
-                    </div>
-                    <button type="submit" className="btn">
-                        Search
-                    </button>
-                </form>
-            </div>
-
-            <div className="card">
                 <h2>All Flights</h2>
                 <table className="flight-table">
                     <thead>

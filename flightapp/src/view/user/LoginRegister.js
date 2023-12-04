@@ -62,7 +62,7 @@ const LoginRegisterPage = () => {
 
     useEffect(() => {
         if (registrationSuccess) {
-            navigate('/UserProfile');
+            navigate('/Home');
         }
     }, [registrationSuccess, navigate]);
 
