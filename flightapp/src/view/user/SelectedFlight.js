@@ -53,12 +53,9 @@ const SelectedFlight = () => {
         try {
             createBooking().then((bookingResponse) => {
                 if (bookingResponse && bookingResponse.data.insertId) {
-                    // Update seat availability
                     updateSeatAvailability().then(() => {
-                        // Add seats to booking
                         return addSeatsToBooking(bookingResponse.data.insertId);
                     }).then(() => {
-                        // If needed, perform additional actions after adding seats
                         console.log("Seats added to booking");
                     }).catch((error) => {
                         console.error("Error updating seat availability or adding seats:", error);
@@ -143,7 +140,6 @@ const SelectedFlight = () => {
                 setLastInsertID(response.data.insertId);
                 console.log(response.data.insertId);
 
-                // Return the response so that it can be used in the next `then` block
                 return response;
             })
             .catch((error) => {
@@ -153,24 +149,19 @@ const SelectedFlight = () => {
     };
 
     const updateSeatAvailability = () => {
-        // Map over selected seats and update availability
         const revertPromises = selectedSeatIds.map((seatNo) => {
             return axios.put(`http://localhost:3001/api/flight/update_seat_availability?seatNo=${seatNo}&flightID=${flightID}`);
         });
 
-        // Use Promise.all to wait for all promises to resolve
         return Promise.all(revertPromises)
             .then((responses) => {
-                // Optionally, process responses if needed
                 console.log("Seats updated:", responses);
 
-                // After updating seat availability, create the booking and add seats
                 return createBooking();
             })
             .catch((error) => {
-                // Handle errors related to updating seat availability
                 console.error("Error updating seats:", error);
-                throw error; // Rethrow the error to propagate it to the next catch block
+                throw error;
             });
     };
 

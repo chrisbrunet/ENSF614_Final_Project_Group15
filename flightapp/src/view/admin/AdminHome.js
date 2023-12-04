@@ -24,7 +24,7 @@ const AdminHome = () => {
                 console.log(response);
                 if (response.data.success) {
                     alert("added aircraft");
-                    setAircraftList([...aircraftList, response.data]); // Update the state with the new aircraft
+                    setAircraftList([...aircraftList, response.data]);
                 } else {
                     alert(response.data);
                 }
@@ -59,7 +59,7 @@ const AdminHome = () => {
         axios.get("http://localhost:3001/api/print_registered_user", {})
             .then((response) => {
                 console.log(response.data.registeredUsers);
-                setRegisteredUsers(response.data.registeredUsers); // Update the state with the fetched users
+                setRegisteredUsers(response.data.registeredUsers);
             })
             .catch((error) => {
                 console.error("Error fetching registered users:", error);
@@ -72,7 +72,7 @@ const AdminHome = () => {
             .then((response) => {
                 console.log(response.data);
                 alert("removed aircraft");
-                setAircraftList(aircraftList.filter(aircraft => aircraft.aircraftID !== aircraftID)); // Update the state by removing the deleted aircraft
+                setAircraftList(aircraftList.filter(aircraft => aircraft.aircraftID !== aircraftID));
             })
             .catch((error) => {
                 console.error("Error removing flight:", error);
@@ -87,12 +87,12 @@ const AdminHome = () => {
             .then((response) => {
                 console.log('Response:', response.data);
                 alert("removed crew")
-                // Handle success message
+
             })
             .catch((error) => {
                 console.error("Error removing crew member:", error);
                 alert("crew cannot be removed as it is either incorrectly written or references an Aircraft.")
-                // Handle the error, e.g., show an error message to the user
+
             });
     };
 
@@ -116,9 +116,9 @@ const AdminHome = () => {
     const [registeredUsersVisible, setRegisteredUsersVisible] = useState(false);
 
     const toggleRegisteredUsersList = () => {
-        // Toggle the visibility state
+
         setRegisteredUsersVisible(!registeredUsersVisible);
-        // If becoming visible, fetch the users
+
         if (!registeredUsersVisible) {
             printUsers();
         }
@@ -138,7 +138,7 @@ const AdminHome = () => {
 
     const [flights, setFlights] = useState([]);
     useEffect(() => {
-        // Fetch the list of flights from the server
+
         axios.get('http://localhost:3001/api/all_flights')
             .then((response) => {
                 setFlights(response.data);
@@ -326,7 +326,7 @@ const AdminHome = () => {
                         <th>Departure City</th>
                         <th>Arrival City</th>
                         <th>Date</th>
-                        <th>Action</th> {/* Add this column for the Edit button */}
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -344,7 +344,6 @@ const AdminHome = () => {
                     </tbody>
                 </table>
             </div>
-            {/* Edit Flight Modal */}
             {editModalVisible && (
                 <div className="card">
                     <div className="modal-content">
@@ -413,7 +412,6 @@ const AdminHome = () => {
                     <tr>
                         <th>Aircraft ID</th>
                         <th>Type</th>
-                        {/* Add more table headers as needed */}
                     </tr>
                     </thead>
                     <tbody>
@@ -456,7 +454,6 @@ const AdminHome = () => {
                                     <strong>First Name:</strong> {user.firstName}<br />
                                     <strong>Last Name:</strong> {user.lastName}<br />
                                     <br />
-                                    {/* Add more details as needed */}
                                 </li>
                             ))}
                         </ul>
